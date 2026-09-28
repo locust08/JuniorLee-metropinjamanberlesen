@@ -6,5 +6,5 @@ export async function getStaticProps() {
 }
 
 export default function Index(props: LegacyPageProps) {
-  return <LegacyPage {...props} />;
+  return <LegacyPage {...props} canonicalPath="/" />;
 }

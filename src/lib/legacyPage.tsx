@@ -18,6 +18,7 @@ export type LegacyPageProps = {
     bm: string;
     cn: string;
   };
+  canonicalPath?: string;
 };
 
 export type LegacyPageContent = {
@@ -73,6 +74,7 @@ export default function LegacyPage({
   bodyHtml,
   locale,
   localizedPaths,
+  canonicalPath,
 }: LegacyPageProps) {
   const pageRef = useRef<HTMLDivElement>(null);
   const [contactControlHosts, setContactControlHosts] =
@@ -84,7 +86,7 @@ export default function LegacyPage({
     });
   const siteOrigin = siteConfig.url.replace(/\/+$/, '');
   const absoluteUrl = (pagePath: string) => `${siteOrigin}${pagePath}`;
-  const canonicalUrl = absoluteUrl(localizedPaths[locale]);
+  const canonicalUrl = absoluteUrl(canonicalPath ?? localizedPaths[locale]);
   const socialImageUrl = absoluteUrl(siteConfig.seo.socialImage);
   const whatsappUrl = siteConfig.social.whatsapp;
 

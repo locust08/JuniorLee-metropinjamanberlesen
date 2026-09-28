@@ -138,7 +138,7 @@ export function getConfig(env) {
     resendFromEmail: env.RESEND_FROM_EMAIL_DEV || env.RESEND_FROM_EMAIL || env.RESEND_FROM_EMAIL_PROD || 'Metro Pinjaman Berlesen <no-reply@locus-t.com.my>',
     resendAdminEmails: env.RESEND_CONFIRMATION_TO_EMAIL_DEV || env.RESEND_TO_EMAIL_DEV || env.RESEND_TO_EMAILS || env.RESEND_TO_EMAIL || env.RESEND_TO_EMAIL_PROD || '',
     resendAdminCcEmails: env.RESEND_CC_EMAIL_DEV || env.RESEND_CC_EMAIL || env.RESEND_CC_EMAIL_PROD || '',
-    bookingBaseUrl: env.BOOKING_BASE_URL || 'https://alfapinjaman.pages.dev',
+    bookingBaseUrl: env.BOOKING_BASE_URL || 'https://metropinjamanberlesen.pages.dev',
     whatsappAccessToken: env.WHATSAPP_ACCESS_TOKEN || '',
     whatsappPhoneNumberId: env.WHATSAPP_PHONE_NUMBER_ID || '',
     whatsappApiVersion: env.WHATSAPP_API_VERSION || 'v23.0',
