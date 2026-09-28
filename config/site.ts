@@ -3,7 +3,7 @@ export const siteConfig = {
   shortName: 'Metro Pinjaman Berlesen',
   description:
     'Personal and business loan enquiries with clear information and direct assistance throughout the application process.',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://metropinjamanberlesen.pages.dev',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.metropinjamanberlesan.com',
   seo: {
     socialImage: '/optimized-media/home-hero-adviser.webp',
     socialImageAlt: 'Adviser assisting a customer with a loan enquiry',

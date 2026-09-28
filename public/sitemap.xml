@@ -2,111 +2,111 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/en</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en"/>
+    <loc>https://www.metropinjamanberlesan.com/en</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en"/>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/bm</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en"/>
+    <loc>https://www.metropinjamanberlesan.com/bm</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en"/>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/cn</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en"/>
+    <loc>https://www.metropinjamanberlesan.com/cn</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en"/>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/en/about-us</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/about-us"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/about-us"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/about-us"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/about-us"/>
+    <loc>https://www.metropinjamanberlesan.com/en/about-us</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/about-us"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/about-us"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/about-us"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/about-us"/>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/bm/about-us</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/about-us"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/about-us"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/about-us"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/about-us"/>
+    <loc>https://www.metropinjamanberlesan.com/bm/about-us</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/about-us"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/about-us"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/about-us"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/about-us"/>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/cn/about-us</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/about-us"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/about-us"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/about-us"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/about-us"/>
+    <loc>https://www.metropinjamanberlesan.com/cn/about-us</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/about-us"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/about-us"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/about-us"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/about-us"/>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/en/loan</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/loan"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/loan"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/loan"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/loan"/>
+    <loc>https://www.metropinjamanberlesan.com/en/loan</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/loan"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/loan"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/loan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/loan"/>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/bm/loan</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/loan"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/loan"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/loan"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/loan"/>
+    <loc>https://www.metropinjamanberlesan.com/bm/loan</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/loan"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/loan"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/loan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/loan"/>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/cn/loan</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/loan"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/loan"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/loan"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/loan"/>
+    <loc>https://www.metropinjamanberlesan.com/cn/loan</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/loan"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/loan"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/loan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/loan"/>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/en/how-to-apply</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/how-to-apply"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/how-to-apply"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/how-to-apply"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/how-to-apply"/>
+    <loc>https://www.metropinjamanberlesan.com/en/how-to-apply</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/how-to-apply"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/how-to-apply"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/how-to-apply"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/how-to-apply"/>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/bm/how-to-apply</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/how-to-apply"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/how-to-apply"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/how-to-apply"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/how-to-apply"/>
+    <loc>https://www.metropinjamanberlesan.com/bm/how-to-apply</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/how-to-apply"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/how-to-apply"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/how-to-apply"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/how-to-apply"/>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/cn/how-to-apply</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/how-to-apply"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/how-to-apply"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/how-to-apply"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/how-to-apply"/>
+    <loc>https://www.metropinjamanberlesan.com/cn/how-to-apply</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/how-to-apply"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/how-to-apply"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/how-to-apply"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/how-to-apply"/>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/en/contact</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/contact"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/contact"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/contact"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/contact"/>
+    <loc>https://www.metropinjamanberlesan.com/en/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/contact"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/contact"/>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/bm/contact</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/contact"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/contact"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/contact"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/contact"/>
+    <loc>https://www.metropinjamanberlesan.com/bm/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/contact"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/contact"/>
   </url>
   <url>
-    <loc>https://metropinjamanberlesen.pages.dev/cn/contact</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://metropinjamanberlesen.pages.dev/en/contact"/>
-    <xhtml:link rel="alternate" hreflang="ms" href="https://metropinjamanberlesen.pages.dev/bm/contact"/>
-    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://metropinjamanberlesen.pages.dev/cn/contact"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://metropinjamanberlesen.pages.dev/en/contact"/>
+    <loc>https://www.metropinjamanberlesan.com/cn/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/contact"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/contact"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/contact"/>
   </url>
 </urlset>
