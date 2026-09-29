@@ -181,7 +181,7 @@ test('contact page metadata uses the configured Kuala Lumpur location', async ()
   assert.doesNotMatch(page.metaDescription, /Pelabuhan Klang|Selangor/);
 });
 
-test('unverified loan-cost and lender disclosures stay hidden on every localized destination', async () => {
+test('every localized destination shows the approved numerical loan-cost disclosure', async () => {
   globalThis.fetch = async () => {
     throw new Error('use the checked-in fallback content');
   };
@@ -199,13 +199,16 @@ test('unverified loan-cost and lender disclosures stay hidden on every localized
       const root = parse(page.bodyHtml);
       const disclosure = root.querySelector('#personal-loan-costs');
 
-      assert.equal(disclosure, null, `${locale}/${pageId} unexpectedly shows the unverified disclosure`);
+      assert.ok(disclosure, `${locale}/${pageId} is missing the disclosure`);
+      assert.match(disclosure.text, /18%/);
+      assert.match(disclosure.text, /RM5,625/);
+      assert.doesNotMatch(disclosure.text, /Awaiting lender verification|Menunggu pengesahan|等待贷款机构核实/);
       assert.doesNotMatch(page.bodyHtml, />\s*(Apply Now|Mohon Sekarang|立即申请)\s*</i);
     }
   }
 });
 
-test('unverified lender terms suppress inconsistent pricing and disable application submissions', async () => {
+test('published loan terms replace inconsistent pricing while applications remain paused', async () => {
   globalThis.fetch = async () => new Response(JSON.stringify({
     loanPage: {
       comparison: { rows: [{}, { personalValue: '8%–12% APR', businessValue: '8%–12% APR' }] },
@@ -221,16 +224,19 @@ test('unverified lender terms suppress inconsistent pricing and disable applicat
   const loanRoot = parse(loanPage.bodyHtml);
   const applicationRoot = parse(applicationPage.bodyHtml);
 
-  assert.doesNotMatch(loanPage.bodyHtml, /8%–12% APR|RM448|RM5,448/);
-  assert.doesNotMatch(loanPage.bodyHtml, /6–60 month repayment period|RM500–RM100,000/);
-  assert.match(loanRoot.querySelector('#loan-comparison-disclaimer')?.text || '', /Applications remain paused/);
+  assert.doesNotMatch(loanPage.bodyHtml, /8%–12% APR|RM448|RM5,448|180-day period/);
+  assert.match(loanPage.bodyHtml, /The maximum Annual Percentage Rate \(APR\) is 18%/);
+  assert.match(loanPage.bodyHtml, /RM5,625/);
+  assert.match(loanPage.bodyHtml, /6–60 months/);
+  assert.match(loanPage.bodyHtml, /RM500–RM100,000/);
+  assert.match(loanRoot.querySelector('#loan-comparison-disclaimer')?.text || '', /maximum APR and representative example are disclosed above/);
   applicationRoot.querySelectorAll('button[type="submit"]').forEach((button) => {
     assert.equal(button.getAttribute('disabled'), 'disabled');
     assert.equal(button.getAttribute(':disabled'), undefined);
     assert.equal(button.querySelector('[x-text]'), null);
   });
   applicationRoot.querySelectorAll('form').forEach((form) => {
-    assert.equal(form.getAttribute('action'), '#');
+    assert.equal(form.getAttribute('action'), '#personal-loan-costs');
     assert.equal(form.getAttribute('x-on:submit.prevent'), '');
     assert.equal(form.getAttribute('aria-describedby'), undefined);
   });
