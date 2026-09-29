@@ -193,7 +193,9 @@ function replaceElementText(element: ParsedElement | null, text: string): void {
 export function applyLoanCompliance(html: string, locale: SiteLocale): string {
   const root = parse(html, { blockTextElements: { script: true, style: true, pre: true, noscript: true } });
   const labels = copy[locale];
-  root.querySelector('nav')?.insertAdjacentHTML('afterend', disclosureSection(locale));
+  if (loanComplianceStatus.verified) {
+    root.querySelector('nav')?.insertAdjacentHTML('afterend', disclosureSection(locale));
+  }
 
   const forcedLocalizedCopy: Array<[string, string]> = [
     ['#home-hero-main-heading', labels.correctedHomeHeading],
@@ -209,7 +211,7 @@ export function applyLoanCompliance(html: string, locale: SiteLocale): string {
     const applicationLabels = /^(Apply Now|Mohon Sekarang|立即申请)$/i;
     root.querySelectorAll('a').forEach((anchor) => {
       if (!applicationLabels.test(anchor.text.trim())) return;
-      anchor.setAttribute('href', '#personal-loan-costs');
+      anchor.setAttribute('href', '#');
       anchor.removeAttribute('target');
       replaceElementText(anchor, labels.applicationPaused);
     });
@@ -221,15 +223,15 @@ export function applyLoanCompliance(html: string, locale: SiteLocale): string {
       replaceElementText(button, labels.applicationPaused);
     });
     root.querySelectorAll('form').forEach((form) => {
-      form.setAttribute('action', '#personal-loan-costs');
+      form.setAttribute('action', '#');
       form.setAttribute('x-on:submit.prevent', '');
-      form.setAttribute('aria-describedby', 'personal-loan-costs-heading');
+      form.removeAttribute('aria-describedby');
     });
     ['site-header-apply-now-label', 'site-header-mobile-drawer-primary-apply-now-label', 'site-header-mobile-drawer-secondary-apply-now-label'].forEach((id) => {
       const link = root.querySelector(`#${id}`);
       if (!link) return;
-      link.setAttribute('href', '#personal-loan-costs');
-      replaceElementText(link, labels.costsButton);
+      link.setAttribute('href', '#');
+      replaceElementText(link, labels.applicationPaused);
     });
     [
       '#loan-comparison-row-2-personal',

@@ -181,7 +181,7 @@ test('contact page metadata uses the configured Kuala Lumpur location', async ()
   assert.doesNotMatch(page.metaDescription, /Pelabuhan Klang|Selangor/);
 });
 
-test('every localized destination shows loan-cost and lender disclosures before application content', async () => {
+test('unverified loan-cost and lender disclosures stay hidden on every localized destination', async () => {
   globalThis.fetch = async () => {
     throw new Error('use the checked-in fallback content');
   };
@@ -193,22 +193,13 @@ test('every localized destination shows loan-cost and lender disclosures before 
     ['how_to_apply.html', 'howToApply'],
     ['contact.html', 'contactUs'],
   ];
-  const localizedHeadings = {
-    en: 'Personal loan costs',
-    bm: 'Kos pinjaman peribadi',
-    cn: '个人贷款费用',
-  };
-
   for (const locale of ['en', 'bm', 'cn']) {
     for (const [fileName, pageId] of pages) {
       const page = await loadLegacyPage(fileName, pageId, locale);
       const root = parse(page.bodyHtml);
       const disclosure = root.querySelector('#personal-loan-costs');
 
-      assert.ok(disclosure, `${locale}/${pageId} is missing the disclosure`);
-      assert.equal(disclosure.querySelector('h2')?.text.trim(), localizedHeadings[locale]);
-      assert.match(disclosure.text, /Maximum APR|APR|年利率/);
-      assert.match(disclosure.text, /Jalan Metro 1/);
+      assert.equal(disclosure, null, `${locale}/${pageId} unexpectedly shows the unverified disclosure`);
       assert.doesNotMatch(page.bodyHtml, />\s*(Apply Now|Mohon Sekarang|立即申请)\s*</i);
     }
   }
@@ -239,7 +230,8 @@ test('unverified lender terms suppress inconsistent pricing and disable applicat
     assert.equal(button.querySelector('[x-text]'), null);
   });
   applicationRoot.querySelectorAll('form').forEach((form) => {
-    assert.equal(form.getAttribute('action'), '#personal-loan-costs');
+    assert.equal(form.getAttribute('action'), '#');
     assert.equal(form.getAttribute('x-on:submit.prevent'), '');
+    assert.equal(form.getAttribute('aria-describedby'), undefined);
   });
 });
