@@ -76,8 +76,8 @@ export const defaultPayloadContent: PublicPayloadContent = {
     },
     "hero": {
       "eyebrow": "Metro Pinjaman Berlesen",
-      "mainHeading": "Pay Off Your Debts",
-      "description": "Are you paying more than 10% interest on your credit cards? Metro Pinjaman Berlesen provides loan information for credit card repayment, high interest debt, and major purchase enquiries. A repayment option designed to provide clear and manageable loan information.",
+      "mainHeading": "Personal loans for eligible applicants",
+      "description": "Personal loans may be used for major expenses, short-term cash needs or debt consolidation. Eligibility and final terms are subject to income, document and lender checks.",
       "primaryButtonLabel": "Apply Now",
       "secondaryButtonLabel": "View Loan Details",
       "leftTopImage": {
@@ -151,8 +151,8 @@ export const defaultPayloadContent: PublicPayloadContent = {
           "description": "We do not require any ATM card."
         },
         {
-          "title": "Open to all Malaysians",
-          "description": "Our service is open to all Malaysians."
+          "title": "For eligible Malaysian applicants",
+          "description": "Personal-loan applicants must be Malaysian, have a steady source of income and earn at least RM3,000 per month."
         },
         {
           "title": "No Guarantor",

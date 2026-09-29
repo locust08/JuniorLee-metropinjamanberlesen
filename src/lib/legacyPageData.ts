@@ -13,6 +13,7 @@ import {
   type SiteLocale,
   applyCurrentBrandName,
 } from './locale.ts';
+import { applyLoanCompliance } from './loanCompliance.ts';
 
 const legacyPageDir = path.join(process.cwd(), 'src', 'legacy-pages');
 
@@ -43,6 +44,21 @@ const genericEnglishSeoTitles: Record<SitePageId, Set<string>> = {
   contactUs: new Set([`Contact Us | ${siteConfig.name}`]),
 };
 
+const complianceSeoDescriptions: Record<SiteLocale, Partial<Record<SitePageId, string>>> = {
+  en: {
+    home: 'Personal and business loan information for eligible Malaysian applicants, with application support from Metro Pinjaman Berlesen.',
+    loan: 'Review personal and business loan information, eligibility and required documents from Metro Pinjaman Berlesen.',
+  },
+  bm: {
+    home: 'Maklumat pinjaman peribadi dan perniagaan untuk pemohon Malaysia yang layak, dengan sokongan permohonan daripada Metro Pinjaman Berlesen.',
+    loan: 'Semak maklumat pinjaman peribadi dan perniagaan, kelayakan serta dokumen yang diperlukan daripada Metro Pinjaman Berlesen.',
+  },
+  cn: {
+    home: '为符合资格的马来西亚申请人提供个人与商业贷款信息，以及 Metro Pinjaman Berlesen 的申请支持。',
+    loan: '查看 Metro Pinjaman Berlesen 提供的个人与商业贷款信息、申请资格和所需文件。',
+  },
+};
+
 function getPageSeo(
   content: PublicPayloadContent,
   pageId: SitePageId,
@@ -66,7 +82,8 @@ function getPageSeo(
 
   return {
     title,
-    description: typeof seo.description === 'string' ? seo.description : '',
+    description: complianceSeoDescriptions[locale][pageId]
+      ?? (typeof seo.description === 'string' ? seo.description : ''),
   };
 }
 
@@ -203,12 +220,12 @@ export async function loadLegacyPage(
 
   const content = localizePayloadContent(await fetchPayloadContent(), locale);
   const seo = getPageSeo(content, pageId, locale);
-  const renderedBody = replaceLeftoverLegacyAssetPaths(
+  const renderedBody = applyLoanCompliance(replaceLeftoverLegacyAssetPaths(
     renderLegacyContent(bodyHtml, pageId, content),
     content,
     locale,
     pageId,
-  );
+  ), locale);
 
   return {
     title: applyCurrentBrandName(seo.title || fallbackTitle),

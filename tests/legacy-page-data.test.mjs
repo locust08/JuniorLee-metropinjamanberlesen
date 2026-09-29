@@ -10,7 +10,7 @@ test.afterEach(() => {
   globalThis.fetch = originalFetch;
 });
 
-test('loadLegacyPage exposes Payload SEO title and description to Next Head props', async () => {
+test('loadLegacyPage exposes Payload SEO title and a compliance-safe description to Next Head props', async () => {
   globalThis.fetch = async () => new Response(JSON.stringify({
     homePage: {
       seo: {
@@ -23,11 +23,11 @@ test('loadLegacyPage exposes Payload SEO title and description to Next Head prop
   const page = await loadLegacyPage('index.html', 'home');
 
   assert.equal(page.title, 'Payload SEO title');
-  assert.equal(page.description, 'Payload SEO description');
+  assert.equal(page.description, 'Personal and business loan information for eligible Malaysian applicants, with application support from Metro Pinjaman Berlesen.');
   assert.match(page.bodyHtml, /id="home-hero-main-heading"/);
 });
 
-test('loadLegacyPage renders published Payload home heading into generated HTML', async () => {
+test('loadLegacyPage protects the corrected home heading from stale published Payload copy', async () => {
   globalThis.fetch = async () => new Response(JSON.stringify({
     homePage: {
       hero: {
@@ -38,7 +38,8 @@ test('loadLegacyPage renders published Payload home heading into generated HTML'
 
   const page = await loadLegacyPage('index.html', 'home');
 
-  assert.match(page.bodyHtml, /Pay Off Your Debts/);
+  assert.match(page.bodyHtml, /Personal loans for eligible applicants/);
+  assert.doesNotMatch(page.bodyHtml, /Pay Off Your Debts/);
   assert.doesNotMatch(page.bodyHtml, /Powering Tomorrow|Simple Loans,/);
 });
 
@@ -178,4 +179,67 @@ test('contact page metadata uses the configured Kuala Lumpur location', async ()
 
   assert.match(page.metaDescription, /Kuala Lumpur/);
   assert.doesNotMatch(page.metaDescription, /Pelabuhan Klang|Selangor/);
+});
+
+test('every localized destination shows loan-cost and lender disclosures before application content', async () => {
+  globalThis.fetch = async () => {
+    throw new Error('use the checked-in fallback content');
+  };
+
+  const pages = [
+    ['index.html', 'home'],
+    ['about_us.html', 'aboutUs'],
+    ['loan.html', 'loan'],
+    ['how_to_apply.html', 'howToApply'],
+    ['contact.html', 'contactUs'],
+  ];
+  const localizedHeadings = {
+    en: 'Personal loan costs',
+    bm: 'Kos pinjaman peribadi',
+    cn: '个人贷款费用',
+  };
+
+  for (const locale of ['en', 'bm', 'cn']) {
+    for (const [fileName, pageId] of pages) {
+      const page = await loadLegacyPage(fileName, pageId, locale);
+      const root = parse(page.bodyHtml);
+      const disclosure = root.querySelector('#personal-loan-costs');
+
+      assert.ok(disclosure, `${locale}/${pageId} is missing the disclosure`);
+      assert.equal(disclosure.querySelector('h2')?.text.trim(), localizedHeadings[locale]);
+      assert.match(disclosure.text, /Maximum APR|APR|年利率/);
+      assert.match(disclosure.text, /Jalan Metro 1/);
+      assert.doesNotMatch(page.bodyHtml, />\s*(Apply Now|Mohon Sekarang|立即申请)\s*</i);
+    }
+  }
+});
+
+test('unverified lender terms suppress inconsistent pricing and disable application submissions', async () => {
+  globalThis.fetch = async () => new Response(JSON.stringify({
+    loanPage: {
+      comparison: { rows: [{}, { personalValue: '8%–12% APR', businessValue: '8%–12% APR' }] },
+      interestRates: {
+        features: [{ description: '8%–12% APR' }],
+        exampleDescription: '180-day period. Interest: RM448. Total payable: RM5,448.',
+      },
+    },
+  }));
+
+  const loanPage = await loadLegacyPage('loan.html', 'loan', 'en');
+  const applicationPage = await loadLegacyPage('how_to_apply.html', 'howToApply', 'en');
+  const loanRoot = parse(loanPage.bodyHtml);
+  const applicationRoot = parse(applicationPage.bodyHtml);
+
+  assert.doesNotMatch(loanPage.bodyHtml, /8%–12% APR|RM448|RM5,448/);
+  assert.doesNotMatch(loanPage.bodyHtml, /6–60 month repayment period|RM500–RM100,000/);
+  assert.match(loanRoot.querySelector('#loan-comparison-disclaimer')?.text || '', /Applications remain paused/);
+  applicationRoot.querySelectorAll('button[type="submit"]').forEach((button) => {
+    assert.equal(button.getAttribute('disabled'), 'disabled');
+    assert.equal(button.getAttribute(':disabled'), undefined);
+    assert.equal(button.querySelector('[x-text]'), null);
+  });
+  applicationRoot.querySelectorAll('form').forEach((form) => {
+    assert.equal(form.getAttribute('action'), '#personal-loan-costs');
+    assert.equal(form.getAttribute('x-on:submit.prevent'), '');
+  });
 });
