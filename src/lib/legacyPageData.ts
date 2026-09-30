@@ -14,6 +14,7 @@ import {
   applyCurrentBrandName,
 } from './locale.ts';
 import { applyLoanCompliance } from './loanCompliance.ts';
+import { applyMetroEnquiryExperience } from './metroEnquiryExperience.ts';
 
 const legacyPageDir = path.join(process.cwd(), 'src', 'legacy-pages');
 
@@ -220,12 +221,12 @@ export async function loadLegacyPage(
 
   const content = localizePayloadContent(await fetchPayloadContent(), locale);
   const seo = getPageSeo(content, pageId, locale);
-  const renderedBody = applyLoanCompliance(replaceLeftoverLegacyAssetPaths(
+  const renderedBody = applyMetroEnquiryExperience(applyLoanCompliance(replaceLeftoverLegacyAssetPaths(
     renderLegacyContent(bodyHtml, pageId, content),
     content,
     locale,
     pageId,
-  ), locale, pageId);
+  ), locale, pageId), locale, pageId);
 
   return {
     title: applyCurrentBrandName(seo.title || fallbackTitle),

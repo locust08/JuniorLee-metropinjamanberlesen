@@ -31,4 +31,10 @@ test('the global WhatsApp lead form preserves its capture and handoff contract',
   assert.equal(config.route, '01de841d-dbe8-4179-b51f-a12987517398');
   assert.equal(config.turnstile, true);
   assert.equal(config.whatsapp, 'https://wa.me/60102150037?text=Hi%2C%20I%E2%80%99d%20like%20to%20find%20out%20more.');
+  assert.match(script, /event==='lead_form_success'&&testLead===false&&typeof window\.alfaTrack==='function'/);
+  assert.match(script, /window\.alfaTrack\('lead_form_submit',\{booking_id:submissionId,submission_id:submissionId/);
+  assert.match(script, /transaction_id:submissionId/);
+  assert.match(script, /eventData\.value=1;eventData\.currency='MYR'/);
+  assert.match(script, /track\('lead_form_attempt'\)/);
+  assert.doesNotMatch(script, /input\.disabled=true;\}\);track\('lead_form_submit'\)/);
 });

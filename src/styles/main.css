@@ -12,6 +12,218 @@
   text-align: center;
 }
 
+.metro-benefits-section {
+  border-bottom: 1px solid var(--brand-border);
+}
+
+#home-hero-main-heading {
+  max-width: 17ch;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(3rem, 5.6vw, 5.5rem) !important;
+  line-height: 1 !important;
+  text-wrap: balance;
+}
+
+.metro-benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.metro-benefit-card {
+  min-height: 100%;
+  padding: 1.5rem;
+  border: 1px solid var(--brand-border);
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(7, 61, 50, 0.06);
+}
+
+.metro-benefit-number,
+.metro-section-kicker {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: var(--brand-accent-strong);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.metro-benefit-card h3 {
+  margin-bottom: 0.65rem;
+  color: var(--brand-primary-dark);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.metro-benefit-card p,
+.metro-process-note {
+  color: var(--brand-text);
+  line-height: 1.65;
+}
+
+.metro-process-note {
+  max-width: 52rem;
+  margin: 2rem auto 0;
+  padding: 1rem 1.25rem;
+  border-left: 4px solid var(--brand-accent);
+  border-radius: 0.75rem;
+  background: var(--brand-accent-soft);
+  text-align: left;
+}
+
+.metro-office-section {
+  background: var(--brand-primary-soft);
+}
+
+.metro-office-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+.metro-primary-link,
+.metro-secondary-link {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--brand-primary-dark);
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.metro-primary-link {
+  background: var(--brand-primary-dark);
+  color: #fff;
+}
+
+.metro-secondary-link {
+  background: #fff;
+  color: var(--brand-primary-dark);
+}
+
+.metro-hours-panel {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: 0.9rem;
+  background: #fff;
+}
+
+.metro-photo-note {
+  margin-top: 1rem;
+  color: var(--brand-text);
+  font-size: 0.875rem;
+}
+
+.metro-office-map {
+  height: 24rem;
+  margin-top: 2rem;
+  overflow: hidden;
+  border: 1px solid var(--brand-border);
+  border-radius: 1.25rem;
+  background: #fff;
+}
+
+.metro-office-map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.metro-trust-card {
+  padding: 2rem;
+  border: 1px solid var(--brand-border);
+  border-radius: 1.25rem;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(7, 61, 50, 0.08);
+}
+
+.metro-trust-card h3 {
+  margin-bottom: 1rem;
+  color: var(--brand-primary-dark);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.metro-trust-card dl > div {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--brand-border);
+}
+
+.metro-trust-card dt {
+  font-weight: 700;
+}
+
+.metro-trust-card dd,
+.metro-trust-card > p {
+  margin-top: 0.25rem;
+  color: var(--brand-text);
+}
+
+.metro-trust-card > p {
+  font-size: 0.875rem;
+}
+
+.metro-faq-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.metro-faq-item {
+  border: 1px solid var(--brand-border);
+  border-radius: 1rem;
+  background: #fff;
+}
+
+.metro-faq-item summary {
+  padding: 1.15rem 3rem 1.15rem 1.25rem;
+  color: var(--brand-primary-dark);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.metro-faq-item p {
+  padding: 0 1.25rem 1.25rem;
+  color: var(--brand-text);
+  line-height: 1.7;
+}
+
+@media (max-width: 1023px) {
+  .metro-benefits-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metro-office-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .metro-benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .metro-benefit-card,
+  .metro-trust-card {
+    padding: 1.25rem;
+  }
+
+  .metro-primary-link,
+  .metro-secondary-link {
+    width: 100%;
+  }
+}
+
 .metro-balanced-cta-heading {
   width: 100%;
   max-width: 15.25ch;
@@ -575,10 +787,10 @@ label[for="preferred-time"] {
   }
 
   #home-hero-main-heading {
-    max-width: 9ch;
+    max-width: 18ch;
     margin-left: auto;
     margin-right: auto;
-    font-size: clamp(3rem, 15vw, 4rem) !important;
+    font-size: clamp(2.65rem, 12vw, 3.5rem) !important;
   }
 
   #home-hero-left-top-image,

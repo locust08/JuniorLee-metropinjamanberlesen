@@ -30,7 +30,11 @@ export const siteConfig = {
   },
   social: {
     whatsapp:
-      'https://wa.me/60102150037?text=Hi%20Metro%20Pinjaman%20Berlesen%2C%20I%20would%20like%20to%20enquire%20about%20a%20loan%20appointment.',
+      'https://wa.me/60102150037?text=Hi%20Metro%2C%20I%20would%20like%20to%20check%20my%20eligibility%20for%20a%20personal%20loan.%20Please%20explain%20the%20required%20documents%2C%20repayment%20costs%20and%20expected%20processing%20time.',
+    personalLoanWhatsapp:
+      'https://wa.me/60102150037?text=Hi%20Metro%2C%20I%20would%20like%20to%20check%20my%20eligibility%20for%20a%20personal%20loan.%20Please%20explain%20the%20required%20documents%2C%20repayment%20costs%20and%20expected%20processing%20time.',
+    businessLoanWhatsapp:
+      'https://wa.me/60102150037?text=Hi%20Metro%2C%20I%20would%20like%20to%20enquire%20about%20a%20business%20loan.%20Please%20explain%20the%20eligibility%20requirements%2C%20required%20documents%20and%20expected%20processing%20time.',
   },
   navigation: [
     { label: 'About Us', path: '/about-us' },

@@ -29,7 +29,7 @@ test('loadLegacyPage exposes Payload SEO title and a compliance-safe description
   assert.match(page.bodyHtml, /id="home-hero-main-heading"/);
 });
 
-test('loadLegacyPage protects the corrected home heading from stale published Payload copy', async () => {
+test('loadLegacyPage protects the approved enquiry heading from stale published Payload copy', async () => {
   globalThis.fetch = async () => new Response(JSON.stringify({
     homePage: {
       hero: {
@@ -40,7 +40,7 @@ test('loadLegacyPage protects the corrected home heading from stale published Pa
 
   const page = await loadLegacyPage('index.html', 'home');
 
-  assert.match(page.bodyHtml, /Personal loans for eligible applicants/);
+  assert.match(page.bodyHtml, /Quick loan enquiries\. Clear costs\. Personal assistance\./);
   assert.doesNotMatch(page.bodyHtml, /Pay Off Your Debts/);
   assert.doesNotMatch(page.bodyHtml, /Powering Tomorrow|Simple Loans,/);
 });
@@ -203,10 +203,17 @@ test('only the localized Personal Loan page shows the loan-cost disclosure', asy
       const disclosure = root.querySelector('#personal-loan-costs');
       assert.equal(disclosure, null, `${locale}/${pageId} should not show the disclosure`);
       assert.doesNotMatch(page.bodyHtml, removedPauseMessage);
-      assert.equal(
-        root.querySelector('#site-header-apply-now-label')?.getAttribute('href'),
-        `/${locale}/personal-loan#personal-loan-costs`,
-      );
+      if (locale === 'en' || locale === 'bm') {
+        assert.equal(
+          root.querySelector('#site-header-apply-now-label')?.getAttribute('href'),
+          'https://wa.me/60102150037?text=Hi%20Metro%2C%20I%20would%20like%20to%20check%20my%20eligibility%20for%20a%20personal%20loan.%20Please%20explain%20the%20required%20documents%2C%20repayment%20costs%20and%20expected%20processing%20time.',
+        );
+      } else {
+        assert.equal(
+          root.querySelector('#site-header-apply-now-label')?.getAttribute('href'),
+          `/${locale}/personal-loan#personal-loan-costs`,
+        );
+      }
       if (pageId === 'home') {
         assert.equal(
           root.querySelector('#home-loan-option-1-title')?.closest('a')?.getAttribute('href'),

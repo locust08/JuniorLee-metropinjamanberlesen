@@ -88,7 +88,7 @@ export default function LegacyPage({
   const absoluteUrl = (pagePath: string) => `${siteOrigin}${pagePath}`;
   const canonicalUrl = absoluteUrl(canonicalPath ?? localizedPaths[locale]);
   const socialImageUrl = absoluteUrl(siteConfig.seo.socialImage);
-  const whatsappUrl = siteConfig.social.whatsapp;
+  const whatsappUrl = siteConfig.social.personalLoanWhatsapp;
 
   useEffect(() => {
     const pageElement = pageRef.current;
@@ -240,7 +240,7 @@ export default function LegacyPage({
         href={whatsappUrl}
         target="_blank"
         rel="noopener"
-        aria-label={locale === 'bm' ? 'Sembang di WhatsApp' : locale === 'cn' ? '通过 WhatsApp 聊天' : 'Chat on WhatsApp'}
+        aria-label={locale === 'bm' ? 'Semak Kelayakan di WhatsApp' : locale === 'cn' ? '通过 WhatsApp 聊天' : 'Check Eligibility on WhatsApp'}
         title={locale === 'bm' ? `Sembang dengan ${siteConfig.name} di WhatsApp` : locale === 'cn' ? `通过 WhatsApp 联系 ${siteConfig.name}` : `Chat with ${siteConfig.name} on WhatsApp`}
       >
         <span className="metro-floating-whatsapp-label">WhatsApp</span>
