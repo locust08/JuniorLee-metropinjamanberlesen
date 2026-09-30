@@ -111,7 +111,6 @@ type ComplianceCopy = {
   permitLabel: string;
   addressLabel: string;
   pendingValue: string;
-  pausedNotice: string;
   costsButton: string;
   applicationPaused: string;
   correctedHomeHeading: string;
@@ -119,7 +118,7 @@ type ComplianceCopy = {
   correctedEligibilityTitle: string;
   correctedEligibilityDescription: string;
   generalDisclaimer: string;
-  pausedReadyDescription: string;
+  readyDescription: string;
   rateRange: string;
   businessDetails: string;
 };
@@ -152,7 +151,6 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     permitLabel: 'Advertising permit number and validity',
     addressLabel: 'Business address',
     pendingValue: 'Awaiting lender verification — not currently published',
-    pausedNotice: 'Applications remain temporarily paused while the lender identity, licence and advertising permit details are confirmed.',
     costsButton: 'Loan costs',
     applicationPaused: 'Applications paused',
     correctedHomeHeading: 'Personal loans for eligible applicants',
@@ -160,7 +158,7 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     correctedEligibilityTitle: 'For eligible Malaysian applicants',
     correctedEligibilityDescription: 'Personal-loan applicants must be Malaysian, have a steady source of income and earn at least RM3,000 per month.',
     generalDisclaimer: 'The maximum APR and representative example are disclosed on the Personal Loan page. Final terms remain subject to eligibility, document verification and lender approval.',
-    pausedReadyDescription: `Applications are paused while the lender identity, licence and advertising permit details are confirmed. You may contact us on WhatsApp at ${siteConfig.contact.phone} for general enquiries.`,
+    readyDescription: `Contact us on WhatsApp at ${siteConfig.contact.phone} for general enquiries about personal and business loans.`,
     rateRange: 'Flat interest rates from 8% per annum, subject to credit assessment and lender approval.',
     businessDetails: 'Contact us for business-loan details',
   },
@@ -191,7 +189,6 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     permitLabel: 'Nombor dan tempoh sah permit iklan',
     addressLabel: 'Alamat perniagaan',
     pendingValue: 'Menunggu pengesahan pemberi pinjam — belum diterbitkan',
-    pausedNotice: 'Permohonan kekal dihentikan sementara semasa identiti pemberi pinjam, lesen dan butiran permit iklan disahkan.',
     costsButton: 'Kos pinjaman',
     applicationPaused: 'Permohonan dihentikan sementara',
     correctedHomeHeading: 'Pinjaman peribadi untuk pemohon yang layak',
@@ -199,7 +196,7 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     correctedEligibilityTitle: 'Untuk pemohon Malaysia yang layak',
     correctedEligibilityDescription: 'Pemohon pinjaman peribadi mestilah rakyat Malaysia, mempunyai sumber pendapatan tetap dan berpendapatan sekurang-kurangnya RM3,000 sebulan.',
     generalDisclaimer: 'APR maksimum dan contoh perwakilan dinyatakan di halaman Pinjaman Peribadi. Terma akhir tertakluk pada kelayakan, pengesahan dokumen dan kelulusan pemberi pinjam.',
-    pausedReadyDescription: `Permohonan dihentikan sementara semasa identiti pemberi pinjam, lesen dan butiran permit iklan disahkan. Anda boleh menghubungi kami melalui WhatsApp di ${siteConfig.contact.phone} untuk pertanyaan umum.`,
+    readyDescription: `Hubungi kami melalui WhatsApp di ${siteConfig.contact.phone} untuk pertanyaan umum mengenai pinjaman peribadi dan perniagaan.`,
     rateRange: 'Kadar faedah rata bermula daripada 8% setahun, tertakluk pada penilaian kredit dan kelulusan pemberi pinjam.',
     businessDetails: 'Hubungi kami untuk butiran pinjaman perniagaan',
   },
@@ -230,7 +227,6 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     permitLabel: '广告准证号码及有效期',
     addressLabel: '营业地址',
     pendingValue: '等待贷款机构核实——目前尚未公布',
-    pausedNotice: '在贷款机构身份、执照和广告准证资料获得确认前，贷款申请仍暂时停止。',
     costsButton: '贷款费用',
     applicationPaused: '申请暂时停止',
     correctedHomeHeading: '为符合资格的申请人提供个人贷款',
@@ -238,7 +234,7 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     correctedEligibilityTitle: '适用于符合资格的马来西亚申请人',
     correctedEligibilityDescription: '个人贷款申请人必须是马来西亚公民，拥有稳定收入来源，且月薪至少为RM3,000。',
     generalDisclaimer: '最高APR和代表性示例已在个人贷款页面列明。最终条款须视申请资格、文件核实及贷款机构批准而定。',
-    pausedReadyDescription: `在贷款机构身份、执照和广告准证资料获得确认前，申请暂时停止。一般咨询可通过 WhatsApp ${siteConfig.contact.phone} 联系我们。`,
+    readyDescription: `如需咨询个人或商业贷款，请通过 WhatsApp ${siteConfig.contact.phone} 联系我们。`,
     rateRange: '固定利率每年8%起，须通过信贷评估并获得贷款机构批准。',
     businessDetails: '商业贷款详情请联系我们',
   },
@@ -269,7 +265,6 @@ export function personalLoanDisclosureSection(locale: SiteLocale): string {
           <div class="bg-white rounded-2xl border border-gray-300 p-5"><h3 class="font-semibold text-teal-900 mb-2">${escapeHtml(labels.flatRateLabel)}</h3><p>${value(terms.flatRate)}</p></div>
         </div>
         <div class="bg-white rounded-2xl border border-gray-300 p-6"><h3 class="font-heading text-2xl text-teal-900 mb-4">${escapeHtml(labels.exampleHeading)}</h3><dl class="grid sm:grid-cols-2 gap-x-8 gap-y-5"><div><dt class="font-semibold">${escapeHtml(labels.cashReceivedLabel)}</dt><dd>${value(terms.exampleCashReceived)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.termLabel)}</dt><dd>${value(terms.exampleTerm)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.stampDutyLabel)}</dt><dd>${value(terms.stampDuty)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.legalChargeLabel)}</dt><dd>${value(terms.legalCharge)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.financedBalanceLabel)}</dt><dd>${value(terms.financedBalance)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.interestBaseLabel)}</dt><dd>${value(terms.interestBase)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.interestLabel)}</dt><dd>${value(terms.exampleInterest)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.installmentsLabel)}</dt><dd>${value(terms.exampleInstallments)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.totalLabel)}</dt><dd>${value(terms.exampleTotalRepaid)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.aprLabel)}</dt><dd>${value(terms.exampleApr)}</dd></div><div class="sm:col-span-2 rounded-xl bg-lime-50 p-4"><dt class="font-semibold">${escapeHtml(labels.upfrontFeesLabel)}</dt><dd>${value(terms.upfrontFees)}</dd></div></dl></div>
-        ${loanComplianceStatus.applicationsEnabled ? '' : `<p class="mt-6 rounded-xl bg-orange-50 border border-teal-900 p-4 font-semibold text-teal-900" role="status">${escapeHtml(labels.pausedNotice)}</p>`}
       </div></div>
     </section>`;
 }
@@ -333,7 +328,7 @@ export function applyLoanCompliance(html: string, locale: SiteLocale, pageId: Si
     ['#home-hero-description', labels.correctedHomeDescription],
     ['#home-why-choose-us-feature-2-title', labels.correctedEligibilityTitle],
     ['#home-why-choose-us-feature-2-description', labels.correctedEligibilityDescription],
-    ['#home-ready-to-get-started-description', labels.pausedReadyDescription],
+    ['#home-ready-to-get-started-description', labels.readyDescription],
     ['#loan-comparison-disclaimer', labels.generalDisclaimer],
     ['#loan-comparison-row-2-personal', labels.rateRange],
     ['#loan-comparison-row-2-business', labels.businessDetails],

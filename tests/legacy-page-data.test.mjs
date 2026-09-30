@@ -195,12 +195,14 @@ test('only the localized Personal Loan page shows the loan-cost disclosure', asy
     ['how_to_apply.html', 'howToApply'],
     ['contact.html', 'contactUs'],
   ];
+  const removedPauseMessage = /Applications (?:remain temporarily paused|are paused) while the lender identity|Permohonan (?:kekal )?dihentikan sementara semasa identiti pemberi pinjam|在贷款机构身份、执照和广告准证资料获得确认前，(?:贷款)?申请(?:仍)?暂时停止/;
   for (const locale of ['en', 'bm', 'cn']) {
     for (const [fileName, pageId] of pages) {
       const page = await loadLegacyPage(fileName, pageId, locale);
       const root = parse(page.bodyHtml);
       const disclosure = root.querySelector('#personal-loan-costs');
       assert.equal(disclosure, null, `${locale}/${pageId} should not show the disclosure`);
+      assert.doesNotMatch(page.bodyHtml, removedPauseMessage);
       assert.equal(
         root.querySelector('#site-header-apply-now-label')?.getAttribute('href'),
         `/${locale}/personal-loan#personal-loan-costs`,
@@ -221,6 +223,8 @@ test('only the localized Personal Loan page shows the loan-cost disclosure', asy
     assert.match(disclosure.text, /18%/);
     assert.match(disclosure.text, /RM5,000/);
     assert.match(disclosure.text, /12/);
+    assert.equal(disclosure.querySelector('[role="status"]'), null);
+    assert.doesNotMatch(personalLoanPage.bodyHtml, removedPauseMessage);
     assert.doesNotMatch(disclosure.text, /Estimated stamp duty: RM25|RM5,625|RM600 at 12%|RM600 pada kadar 12%|利息为RM600/);
     assert.equal(personalLoanPage.localizedPaths[locale], `/${locale}/personal-loan`);
   }
