@@ -1,5 +1,6 @@
 import { parse } from 'node-html-parser';
 import { siteConfig } from '../../config/site.ts';
+import type { SitePageId } from '../payload/content.ts';
 import type { SiteLocale } from './locale.ts';
 
 type PublishedLoanTerms = {
@@ -122,7 +123,7 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     correctedHomeDescription: 'Personal loans may be used for major expenses, short-term cash needs or debt consolidation. Eligibility and final terms are subject to income, document and lender checks.',
     correctedEligibilityTitle: 'For eligible Malaysian applicants',
     correctedEligibilityDescription: 'Personal-loan applicants must be Malaysian, have a steady source of income and earn at least RM3,000 per month.',
-    generalDisclaimer: 'The maximum APR and representative example are disclosed above. Final terms remain subject to eligibility, document verification and lender approval.',
+    generalDisclaimer: 'The maximum APR and representative example are disclosed on the homepage. Final terms remain subject to eligibility, document verification and lender approval.',
     pausedReadyDescription: `Applications are paused while the lender identity, licence and advertising permit details are confirmed. You may contact us on WhatsApp at ${siteConfig.contact.phone} for general enquiries.`,
     rateRange: '8%–12% annual interest (flat/simple basis)',
     businessDetails: 'Contact us for business-loan details',
@@ -155,7 +156,7 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     correctedHomeDescription: 'Pinjaman peribadi boleh digunakan untuk perbelanjaan utama, keperluan tunai jangka pendek atau penyatuan hutang. Kelayakan dan terma akhir tertakluk pada semakan pendapatan, dokumen dan pemberi pinjam.',
     correctedEligibilityTitle: 'Untuk pemohon Malaysia yang layak',
     correctedEligibilityDescription: 'Pemohon pinjaman peribadi mestilah rakyat Malaysia, mempunyai sumber pendapatan tetap dan berpendapatan sekurang-kurangnya RM3,000 sebulan.',
-    generalDisclaimer: 'APR maksimum dan contoh perwakilan dinyatakan di atas. Terma akhir tertakluk pada kelayakan, pengesahan dokumen dan kelulusan pemberi pinjam.',
+    generalDisclaimer: 'APR maksimum dan contoh perwakilan dinyatakan di halaman utama. Terma akhir tertakluk pada kelayakan, pengesahan dokumen dan kelulusan pemberi pinjam.',
     pausedReadyDescription: `Permohonan dihentikan sementara semasa identiti pemberi pinjam, lesen dan butiran permit iklan disahkan. Anda boleh menghubungi kami melalui WhatsApp di ${siteConfig.contact.phone} untuk pertanyaan umum.`,
     rateRange: 'Faedah tahunan 8%–12% (kadar rata/mudah)',
     businessDetails: 'Hubungi kami untuk butiran pinjaman perniagaan',
@@ -188,7 +189,7 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     correctedHomeDescription: '个人贷款可用于大额开支、短期资金需求或债务整合。申请资格和最终条款须经收入、文件及贷款机构审核。',
     correctedEligibilityTitle: '适用于符合资格的马来西亚申请人',
     correctedEligibilityDescription: '个人贷款申请人必须是马来西亚公民，拥有稳定收入来源，且月薪至少为RM3,000。',
-    generalDisclaimer: '最高APR和代表性示例已在上方列明。最终条款须视申请资格、文件核实及贷款机构批准而定。',
+    generalDisclaimer: '最高APR和代表性示例已在主页列明。最终条款须视申请资格、文件核实及贷款机构批准而定。',
     pausedReadyDescription: `在贷款机构身份、执照和广告准证资料获得确认前，申请暂时停止。一般咨询可通过 WhatsApp ${siteConfig.contact.phone} 联系我们。`,
     rateRange: '每年8%–12%利息（固定／单利计算）',
     businessDetails: '商业贷款详情请联系我们',
@@ -237,12 +238,18 @@ function replaceElementText(element: ParsedElement | null, text: string): void {
   else element.textContent = text;
 }
 
-export function applyLoanCompliance(html: string, locale: SiteLocale): string {
+export function applyLoanCompliance(html: string, locale: SiteLocale, pageId: SitePageId): string {
   const root = parse(html, { blockTextElements: { script: true, style: true, pre: true, noscript: true } });
   const labels = copy[locale];
-  if (loanComplianceStatus.costsPublished) {
-    root.querySelector('nav')?.insertAdjacentHTML('afterend', disclosureSection(locale));
+  if (loanComplianceStatus.costsPublished && pageId === 'home') {
+    root.querySelector('#home-ready-to-get-started-heading')
+      ?.closest('section')
+      ?.insertAdjacentHTML('afterend', disclosureSection(locale));
   }
+
+  const disclosureTarget = pageId === 'home'
+    ? '#personal-loan-costs'
+    : `/${locale}#personal-loan-costs`;
 
   const forcedLocalizedCopy: Array<[string, string]> = [
     ['#home-hero-main-heading', labels.correctedHomeHeading],
@@ -269,7 +276,7 @@ export function applyLoanCompliance(html: string, locale: SiteLocale): string {
     const applicationLabels = /^(Apply Now|Mohon Sekarang|立即申请)$/i;
     root.querySelectorAll('a').forEach((anchor) => {
       if (!applicationLabels.test(anchor.text.trim())) return;
-      anchor.setAttribute('href', '#personal-loan-costs');
+      anchor.setAttribute('href', disclosureTarget);
       anchor.removeAttribute('target');
       replaceElementText(anchor, labels.applicationPaused);
     });
@@ -281,14 +288,14 @@ export function applyLoanCompliance(html: string, locale: SiteLocale): string {
       replaceElementText(button, labels.applicationPaused);
     });
     root.querySelectorAll('form').forEach((form) => {
-      form.setAttribute('action', '#personal-loan-costs');
+      form.setAttribute('action', disclosureTarget);
       form.setAttribute('x-on:submit.prevent', '');
       form.removeAttribute('aria-describedby');
     });
     ['site-header-apply-now-label', 'site-header-mobile-drawer-primary-apply-now-label', 'site-header-mobile-drawer-secondary-apply-now-label'].forEach((id) => {
       const link = root.querySelector(`#${id}`);
       if (!link) return;
-      link.setAttribute('href', '#personal-loan-costs');
+      link.setAttribute('href', disclosureTarget);
       replaceElementText(link, labels.costsButton);
     });
     root.querySelector('#about-us-statistic-3-value')?.closest('div')?.remove();

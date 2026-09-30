@@ -225,7 +225,7 @@ export async function loadLegacyPage(
     content,
     locale,
     pageId,
-  ), locale);
+  ), locale, pageId);
 
   return {
     title: applyCurrentBrandName(seo.title || fallbackTitle),
