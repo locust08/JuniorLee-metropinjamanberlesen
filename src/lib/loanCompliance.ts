@@ -7,12 +7,18 @@ type PublishedLoanTerms = {
   loanAmount: string;
   repaymentPeriod: string;
   maximumApr: string;
-  fees: string;
-  exampleAmount: string;
-  exampleSchedule: string;
+  flatRate: string;
+  stampDuty: string;
+  legalCharge: string;
+  exampleCashReceived: string;
+  exampleTerm: string;
+  financedBalance: string;
+  interestBase: string;
   exampleInterest: string;
-  exampleFees: string;
-  exampleTotalPayable: string;
+  exampleInstallments: string;
+  exampleTotalRepaid: string;
+  exampleApr: string;
+  upfrontFees: string;
 };
 
 /** Numerical terms approved for publication from the compliance brief. */
@@ -21,37 +27,55 @@ export const loanComplianceStatus = {
   applicationsEnabled: false,
   verifiedTerms: {
     en: {
-      loanAmount: 'RM500–RM100,000',
-      repaymentPeriod: '6–60 months',
+      loanAmount: 'Available amounts are limited to combinations verified at or below 18% APR. The advertised RM500 minimum is withheld pending fee validation.',
+      repaymentPeriod: 'Available terms are limited to combinations verified at or below 18% APR. The advertised six-month minimum is withheld pending fee validation.',
       maximumApr: 'The maximum Annual Percentage Rate (APR) is 18%.',
-      fees: 'Application, processing and administration fees: RM0. Stamp duty: approximately 0.5% of the loan amount. Actual legal costs may apply. Early-settlement fee: RM0.',
-      exampleAmount: 'RM5,000',
-      exampleSchedule: '12 monthly repayments of RM468.75',
-      exampleInterest: 'RM600 at 12% per annum, calculated on a flat/simple basis',
-      exampleFees: 'Estimated stamp duty: RM25. Other fees: RM0.',
-      exampleTotalPayable: 'RM5,625',
+      flatRate: 'Flat interest rates from 8% per annum, subject to credit assessment and lender approval.',
+      stampDuty: 'RM5 per RM1,000 or part thereof, assessed on the lender’s actual agreement amount. The exact amount must be confirmed by the lender; RM25 is not assumed.',
+      legalCharge: 'The lender’s documented legal or witnessing charge. The exact amount must be confirmed because there is no single fixed fee for every lender.',
+      exampleCashReceived: 'RM5,000',
+      exampleTerm: '12 months',
+      financedBalance: 'RM5,000 plus the lender-confirmed stamp duty and legal/witnessing charge',
+      interestBase: 'The confirmed financed balance',
+      exampleInterest: '8% flat annual interest × confirmed financed balance × 12/12',
+      exampleInstallments: '12 equal instalments — exact amount pending the lender’s signed repayment schedule',
+      exampleTotalRepaid: 'Pending the lender’s signed repayment schedule and fee assessment',
+      exampleApr: 'To be calculated against the RM5,000 cash received; it must not exceed 18%',
+      upfrontFees: 'No fee is collected upfront. Confirmed charges are added to the financed balance.',
     },
     bm: {
-      loanAmount: 'RM500–RM100,000',
-      repaymentPeriod: '6–60 bulan',
+      loanAmount: 'Jumlah yang tersedia dihadkan kepada kombinasi yang disahkan pada atau di bawah APR 18%. Minimum RM500 tidak diterbitkan sementara menunggu pengesahan fi.',
+      repaymentPeriod: 'Tempoh yang tersedia dihadkan kepada kombinasi yang disahkan pada atau di bawah APR 18%. Minimum enam bulan tidak diterbitkan sementara menunggu pengesahan fi.',
       maximumApr: 'Kadar Peratusan Tahunan (APR) maksimum ialah 18%.',
-      fees: 'Fi permohonan, pemprosesan dan pentadbiran: RM0. Duti setem: kira-kira 0.5% daripada jumlah pinjaman. Kos guaman sebenar mungkin dikenakan. Fi penyelesaian awal: RM0.',
-      exampleAmount: 'RM5,000',
-      exampleSchedule: '12 bayaran bulanan sebanyak RM468.75',
-      exampleInterest: 'RM600 pada kadar 12% setahun, dikira secara kadar rata/mudah',
-      exampleFees: 'Anggaran duti setem: RM25. Fi lain: RM0.',
-      exampleTotalPayable: 'RM5,625',
+      flatRate: 'Kadar faedah rata bermula daripada 8% setahun, tertakluk pada penilaian kredit dan kelulusan pemberi pinjam.',
+      stampDuty: 'RM5 bagi setiap RM1,000 atau sebahagiannya, berdasarkan jumlah sebenar dalam perjanjian pemberi pinjam. Jumlah tepat mesti disahkan oleh pemberi pinjam; RM25 tidak diandaikan.',
+      legalCharge: 'Caj guaman atau penyaksian yang didokumenkan oleh pemberi pinjam. Jumlah tepat mesti disahkan kerana tiada satu fi tetap untuk semua pemberi pinjam.',
+      exampleCashReceived: 'RM5,000',
+      exampleTerm: '12 bulan',
+      financedBalance: 'RM5,000 ditambah duti setem dan caj guaman/penyaksian yang disahkan oleh pemberi pinjam',
+      interestBase: 'Baki pembiayaan yang disahkan',
+      exampleInterest: 'Faedah rata tahunan 8% × baki pembiayaan yang disahkan × 12/12',
+      exampleInstallments: '12 ansuran sama rata — jumlah tepat menunggu jadual bayaran balik yang ditandatangani oleh pemberi pinjam',
+      exampleTotalRepaid: 'Menunggu jadual bayaran balik yang ditandatangani dan penilaian fi pemberi pinjam',
+      exampleApr: 'Akan dikira berdasarkan RM5,000 tunai diterima; ia tidak boleh melebihi 18%',
+      upfrontFees: 'Tiada fi dikutip terlebih dahulu. Caj yang disahkan ditambah kepada baki pembiayaan.',
     },
     cn: {
-      loanAmount: 'RM500–RM100,000',
-      repaymentPeriod: '6–60个月',
+      loanAmount: '可提供的金额仅限于经核实APR不超过18%的组合。在费用验证完成前，不公布RM500最低金额。',
+      repaymentPeriod: '可提供的期限仅限于经核实APR不超过18%的组合。在费用验证完成前，不公布六个月最低期限。',
       maximumApr: '最高年利率（APR）为18%。',
-      fees: '申请费、处理费和行政费：RM0。印花税：约为贷款金额的0.5%。可能收取实际法律费用。提前结清费用：RM0。',
-      exampleAmount: 'RM5,000',
-      exampleSchedule: '每月偿还RM468.75，共12期',
-      exampleInterest: '按每年12%的固定／单利计算，利息为RM600',
-      exampleFees: '预计印花税：RM25。其他费用：RM0。',
-      exampleTotalPayable: 'RM5,625',
+      flatRate: '固定利率每年8%起，须通过信贷评估并获得贷款机构批准。',
+      stampDuty: '每RM1,000或不足RM1,000的部分征收RM5，并按贷款机构实际协议金额评定。确切金额须由贷款机构确认；不预设为RM25。',
+      legalCharge: '贷款机构记录的法律或见证费用。由于各贷款机构并无统一固定费用，确切金额须由贷款机构确认。',
+      exampleCashReceived: 'RM5,000',
+      exampleTerm: '12个月',
+      financedBalance: 'RM5,000加上贷款机构确认的印花税及法律／见证费用',
+      interestBase: '经确认的融资余额',
+      exampleInterest: '每年8%固定利率 × 经确认的融资余额 × 12/12',
+      exampleInstallments: '12期等额还款——确切金额以贷款机构签署的还款表为准',
+      exampleTotalRepaid: '等待贷款机构签署的还款表及费用评估',
+      exampleApr: '按实际收到的RM5,000计算；不得超过18%',
+      upfrontFees: '不预先收取任何费用。经确认的费用将计入融资余额。',
     },
   },
 } satisfies {
@@ -66,13 +90,19 @@ type ComplianceCopy = {
   loanAmountLabel: string;
   repaymentLabel: string;
   maximumAprLabel: string;
-  feesLabel: string;
+  flatRateLabel: string;
   exampleHeading: string;
-  amountLabel: string;
-  scheduleLabel: string;
+  cashReceivedLabel: string;
+  termLabel: string;
+  stampDutyLabel: string;
+  legalChargeLabel: string;
+  financedBalanceLabel: string;
+  interestBaseLabel: string;
   interestLabel: string;
-  exampleFeesLabel: string;
+  installmentsLabel: string;
   totalLabel: string;
+  aprLabel: string;
+  upfrontFeesLabel: string;
   identityHeading: string;
   legalNameLabel: string;
   relationshipLabel: string;
@@ -101,13 +131,19 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     loanAmountLabel: 'Personal-loan amount',
     repaymentLabel: 'Minimum and maximum repayment period',
     maximumAprLabel: 'Maximum APR',
-    feesLabel: 'All applicable fees',
-    exampleHeading: 'Representative example',
-    amountLabel: 'Amount borrowed',
-    scheduleLabel: 'Repayment schedule',
-    interestLabel: 'Interest',
-    exampleFeesLabel: 'Fees',
-    totalLabel: 'Total payable',
+    flatRateLabel: 'Flat interest rate',
+    exampleHeading: 'Representative example pending lender confirmation',
+    cashReceivedLabel: 'Cash received',
+    termLabel: 'Term',
+    stampDutyLabel: 'Stamp duty',
+    legalChargeLabel: 'Legal / witnessing charge',
+    financedBalanceLabel: 'Financed balance',
+    interestBaseLabel: 'Interest calculation base',
+    interestLabel: 'Interest calculation',
+    installmentsLabel: '12 instalments',
+    totalLabel: 'Total repaid',
+    aprLabel: 'APR against cash received',
+    upfrontFeesLabel: 'Upfront fees',
     identityHeading: 'Lender and service identity',
     legalNameLabel: 'Registered lender legal name',
     relationshipLabel: 'Relationship to Metro Pinjaman Berlesen',
@@ -123,9 +159,9 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     correctedHomeDescription: 'Personal loans may be used for major expenses, short-term cash needs or debt consolidation. Eligibility and final terms are subject to income, document and lender checks.',
     correctedEligibilityTitle: 'For eligible Malaysian applicants',
     correctedEligibilityDescription: 'Personal-loan applicants must be Malaysian, have a steady source of income and earn at least RM3,000 per month.',
-    generalDisclaimer: 'The maximum APR and representative example are disclosed on the homepage. Final terms remain subject to eligibility, document verification and lender approval.',
+    generalDisclaimer: 'The maximum APR and representative example are disclosed on the Personal Loan page. Final terms remain subject to eligibility, document verification and lender approval.',
     pausedReadyDescription: `Applications are paused while the lender identity, licence and advertising permit details are confirmed. You may contact us on WhatsApp at ${siteConfig.contact.phone} for general enquiries.`,
-    rateRange: '8%–12% annual interest (flat/simple basis)',
+    rateRange: 'Flat interest rates from 8% per annum, subject to credit assessment and lender approval.',
     businessDetails: 'Contact us for business-loan details',
   },
   bm: {
@@ -134,13 +170,19 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     loanAmountLabel: 'Jumlah pinjaman peribadi',
     repaymentLabel: 'Tempoh bayaran balik minimum dan maksimum',
     maximumAprLabel: 'Kadar Peratusan Tahunan (APR) maksimum',
-    feesLabel: 'Semua fi yang dikenakan',
-    exampleHeading: 'Contoh perwakilan',
-    amountLabel: 'Jumlah pinjaman',
-    scheduleLabel: 'Jadual bayaran balik',
-    interestLabel: 'Faedah',
-    exampleFeesLabel: 'Fi',
-    totalLabel: 'Jumlah perlu dibayar',
+    flatRateLabel: 'Kadar faedah rata',
+    exampleHeading: 'Contoh perwakilan menunggu pengesahan pemberi pinjam',
+    cashReceivedLabel: 'Tunai diterima',
+    termLabel: 'Tempoh',
+    stampDutyLabel: 'Duti setem',
+    legalChargeLabel: 'Caj guaman / penyaksian',
+    financedBalanceLabel: 'Baki pembiayaan',
+    interestBaseLabel: 'Asas pengiraan faedah',
+    interestLabel: 'Pengiraan faedah',
+    installmentsLabel: '12 ansuran',
+    totalLabel: 'Jumlah dibayar balik',
+    aprLabel: 'APR berdasarkan tunai diterima',
+    upfrontFeesLabel: 'Fi pendahuluan',
     identityHeading: 'Identiti pemberi pinjam dan perkhidmatan',
     legalNameLabel: 'Nama sah pemberi pinjam berdaftar',
     relationshipLabel: 'Hubungan dengan Metro Pinjaman Berlesen',
@@ -156,9 +198,9 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     correctedHomeDescription: 'Pinjaman peribadi boleh digunakan untuk perbelanjaan utama, keperluan tunai jangka pendek atau penyatuan hutang. Kelayakan dan terma akhir tertakluk pada semakan pendapatan, dokumen dan pemberi pinjam.',
     correctedEligibilityTitle: 'Untuk pemohon Malaysia yang layak',
     correctedEligibilityDescription: 'Pemohon pinjaman peribadi mestilah rakyat Malaysia, mempunyai sumber pendapatan tetap dan berpendapatan sekurang-kurangnya RM3,000 sebulan.',
-    generalDisclaimer: 'APR maksimum dan contoh perwakilan dinyatakan di halaman utama. Terma akhir tertakluk pada kelayakan, pengesahan dokumen dan kelulusan pemberi pinjam.',
+    generalDisclaimer: 'APR maksimum dan contoh perwakilan dinyatakan di halaman Pinjaman Peribadi. Terma akhir tertakluk pada kelayakan, pengesahan dokumen dan kelulusan pemberi pinjam.',
     pausedReadyDescription: `Permohonan dihentikan sementara semasa identiti pemberi pinjam, lesen dan butiran permit iklan disahkan. Anda boleh menghubungi kami melalui WhatsApp di ${siteConfig.contact.phone} untuk pertanyaan umum.`,
-    rateRange: 'Faedah tahunan 8%–12% (kadar rata/mudah)',
+    rateRange: 'Kadar faedah rata bermula daripada 8% setahun, tertakluk pada penilaian kredit dan kelulusan pemberi pinjam.',
     businessDetails: 'Hubungi kami untuk butiran pinjaman perniagaan',
   },
   cn: {
@@ -167,13 +209,19 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     loanAmountLabel: '个人贷款金额',
     repaymentLabel: '最短和最长还款期限',
     maximumAprLabel: '最高年利率（APR）',
-    feesLabel: '所有适用费用',
-    exampleHeading: '代表性示例',
-    amountLabel: '借款金额',
-    scheduleLabel: '还款安排',
-    interestLabel: '利息',
-    exampleFeesLabel: '费用',
-    totalLabel: '应还总额',
+    flatRateLabel: '固定利率',
+    exampleHeading: '待贷款机构确认的代表性示例',
+    cashReceivedLabel: '实际收到现金',
+    termLabel: '期限',
+    stampDutyLabel: '印花税',
+    legalChargeLabel: '法律／见证费用',
+    financedBalanceLabel: '融资余额',
+    interestBaseLabel: '利息计算基数',
+    interestLabel: '利息计算',
+    installmentsLabel: '12期还款',
+    totalLabel: '偿还总额',
+    aprLabel: '按实际收到现金计算的APR',
+    upfrontFeesLabel: '预付费用',
     identityHeading: '贷款机构与服务身份',
     legalNameLabel: '注册贷款机构法定名称',
     relationshipLabel: '与 Metro Pinjaman Berlesen 的关系',
@@ -189,9 +237,9 @@ const copy: Record<SiteLocale, ComplianceCopy> = {
     correctedHomeDescription: '个人贷款可用于大额开支、短期资金需求或债务整合。申请资格和最终条款须经收入、文件及贷款机构审核。',
     correctedEligibilityTitle: '适用于符合资格的马来西亚申请人',
     correctedEligibilityDescription: '个人贷款申请人必须是马来西亚公民，拥有稳定收入来源，且月薪至少为RM3,000。',
-    generalDisclaimer: '最高APR和代表性示例已在主页列明。最终条款须视申请资格、文件核实及贷款机构批准而定。',
+    generalDisclaimer: '最高APR和代表性示例已在个人贷款页面列明。最终条款须视申请资格、文件核实及贷款机构批准而定。',
     pausedReadyDescription: `在贷款机构身份、执照和广告准证资料获得确认前，申请暂时停止。一般咨询可通过 WhatsApp ${siteConfig.contact.phone} 联系我们。`,
-    rateRange: '每年8%–12%利息（固定／单利计算）',
+    rateRange: '固定利率每年8%起，须通过信贷评估并获得贷款机构批准。',
     businessDetails: '商业贷款详情请联系我们',
   },
 };
@@ -205,7 +253,7 @@ function escapeHtml(value: string): string {
     .replaceAll("'", '&#039;');
 }
 
-function disclosureSection(locale: SiteLocale): string {
+export function personalLoanDisclosureSection(locale: SiteLocale): string {
   const labels = copy[locale];
   const terms = loanComplianceStatus.verifiedTerms[locale];
   const value = (verifiedValue: string) => escapeHtml(verifiedValue);
@@ -214,16 +262,53 @@ function disclosureSection(locale: SiteLocale): string {
     <section id="personal-loan-costs" class="py-12 lg:py-16 bg-teal-50 border-y border-teal-900" aria-labelledby="personal-loan-costs-heading">
       <div class="container mx-auto px-4"><div class="max-w-6xl mx-auto">
         <div class="mb-8"><p class="text-sm font-bold uppercase tracking-wide text-teal-900 mb-2">${escapeHtml(siteConfig.name)}</p><h2 id="personal-loan-costs-heading" class="font-heading text-4xl lg:text-5xl tracking-tight text-teal-900 mb-3">${escapeHtml(labels.heading)}</h2><p class="text-lg text-gray-700">${escapeHtml(labels.intro)}</p></div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="grid sm:grid-cols-2 gap-4 mb-8">
           <div class="bg-white rounded-2xl border border-gray-300 p-5"><h3 class="font-semibold text-teal-900 mb-2">${escapeHtml(labels.loanAmountLabel)}</h3><p>${value(terms.loanAmount)}</p></div>
           <div class="bg-white rounded-2xl border border-gray-300 p-5"><h3 class="font-semibold text-teal-900 mb-2">${escapeHtml(labels.repaymentLabel)}</h3><p>${value(terms.repaymentPeriod)}</p></div>
           <div class="bg-white rounded-2xl border-2 border-teal-900 p-5"><h3 class="font-semibold text-teal-900 mb-2">${escapeHtml(labels.maximumAprLabel)}</h3><p>${value(terms.maximumApr)}</p></div>
-          <div class="bg-white rounded-2xl border border-gray-300 p-5"><h3 class="font-semibold text-teal-900 mb-2">${escapeHtml(labels.feesLabel)}</h3><p>${value(terms.fees)}</p></div>
+          <div class="bg-white rounded-2xl border border-gray-300 p-5"><h3 class="font-semibold text-teal-900 mb-2">${escapeHtml(labels.flatRateLabel)}</h3><p>${value(terms.flatRate)}</p></div>
         </div>
-        <div class="bg-white rounded-2xl border border-gray-300 p-6"><h3 class="font-heading text-2xl text-teal-900 mb-4">${escapeHtml(labels.exampleHeading)}</h3><dl class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4"><div><dt class="font-semibold">${escapeHtml(labels.amountLabel)}</dt><dd>${value(terms.exampleAmount)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.scheduleLabel)}</dt><dd>${value(terms.exampleSchedule)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.interestLabel)}</dt><dd>${value(terms.exampleInterest)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.exampleFeesLabel)}</dt><dd>${value(terms.exampleFees)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.totalLabel)}</dt><dd>${value(terms.exampleTotalPayable)}</dd></div></dl></div>
+        <div class="bg-white rounded-2xl border border-gray-300 p-6"><h3 class="font-heading text-2xl text-teal-900 mb-4">${escapeHtml(labels.exampleHeading)}</h3><dl class="grid sm:grid-cols-2 gap-x-8 gap-y-5"><div><dt class="font-semibold">${escapeHtml(labels.cashReceivedLabel)}</dt><dd>${value(terms.exampleCashReceived)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.termLabel)}</dt><dd>${value(terms.exampleTerm)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.stampDutyLabel)}</dt><dd>${value(terms.stampDuty)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.legalChargeLabel)}</dt><dd>${value(terms.legalCharge)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.financedBalanceLabel)}</dt><dd>${value(terms.financedBalance)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.interestBaseLabel)}</dt><dd>${value(terms.interestBase)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.interestLabel)}</dt><dd>${value(terms.exampleInterest)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.installmentsLabel)}</dt><dd>${value(terms.exampleInstallments)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.totalLabel)}</dt><dd>${value(terms.exampleTotalRepaid)}</dd></div><div><dt class="font-semibold">${escapeHtml(labels.aprLabel)}</dt><dd>${value(terms.exampleApr)}</dd></div><div class="sm:col-span-2 rounded-xl bg-lime-50 p-4"><dt class="font-semibold">${escapeHtml(labels.upfrontFeesLabel)}</dt><dd>${value(terms.upfrontFees)}</dd></div></dl></div>
         ${loanComplianceStatus.applicationsEnabled ? '' : `<p class="mt-6 rounded-xl bg-orange-50 border border-teal-900 p-4 font-semibold text-teal-900" role="status">${escapeHtml(labels.pausedNotice)}</p>`}
       </div></div>
     </section>`;
+}
+
+export function calculateRepresentativeCheck({
+  cashReceived,
+  stampDuty,
+  legalCharge,
+  flatAnnualRate,
+  termMonths,
+}: {
+  cashReceived: number;
+  stampDuty: number;
+  legalCharge: number;
+  flatAnnualRate: number;
+  termMonths: number;
+}) {
+  const financedBalance = cashReceived + stampDuty + legalCharge;
+  const interest = financedBalance * flatAnnualRate * (termMonths / 12);
+  const totalRepaid = financedBalance + interest;
+  const installment = totalRepaid / termMonths;
+
+  let low = 0;
+  let high = 1;
+  for (let iteration = 0; iteration < 100; iteration += 1) {
+    const monthlyRate = (low + high) / 2;
+    const presentValue = installment * (1 - (1 + monthlyRate) ** -termMonths) / monthlyRate;
+    if (presentValue > cashReceived) low = monthlyRate;
+    else high = monthlyRate;
+  }
+
+  const roundCurrency = (value: number) => Math.round(value * 100) / 100;
+  return {
+    financedBalance: roundCurrency(financedBalance),
+    interest: roundCurrency(interest),
+    installment: roundCurrency(installment),
+    totalRepaid: roundCurrency(totalRepaid),
+    nominalAprPercent: Math.round(((low + high) / 2) * 12 * 10000) / 100,
+  };
 }
 
 type ParsedElement = NonNullable<ReturnType<ReturnType<typeof parse>['querySelector']>>;
@@ -241,15 +326,7 @@ function replaceElementText(element: ParsedElement | null, text: string): void {
 export function applyLoanCompliance(html: string, locale: SiteLocale, pageId: SitePageId): string {
   const root = parse(html, { blockTextElements: { script: true, style: true, pre: true, noscript: true } });
   const labels = copy[locale];
-  if (loanComplianceStatus.costsPublished && pageId === 'home') {
-    root.querySelector('#home-ready-to-get-started-heading')
-      ?.closest('section')
-      ?.insertAdjacentHTML('afterend', disclosureSection(locale));
-  }
-
-  const disclosureTarget = pageId === 'home'
-    ? '#personal-loan-costs'
-    : `/${locale}#personal-loan-costs`;
+  const disclosureTarget = `/${locale}/personal-loan#personal-loan-costs`;
 
   const forcedLocalizedCopy: Array<[string, string]> = [
     ['#home-hero-main-heading', labels.correctedHomeHeading],
@@ -260,6 +337,7 @@ export function applyLoanCompliance(html: string, locale: SiteLocale, pageId: Si
     ['#loan-comparison-disclaimer', labels.generalDisclaimer],
     ['#loan-comparison-row-2-personal', labels.rateRange],
     ['#loan-comparison-row-2-business', labels.businessDetails],
+    ['#loan-personal-feature-1-title', labels.loanAmountLabel],
     ['#loan-comparison-row-3-personal', loanComplianceStatus.verifiedTerms[locale].loanAmount],
     ['#loan-comparison-row-3-business', labels.businessDetails],
     ['#loan-comparison-row-4-personal', loanComplianceStatus.verifiedTerms[locale].repaymentPeriod],
@@ -267,8 +345,8 @@ export function applyLoanCompliance(html: string, locale: SiteLocale, pageId: Si
     ['#loan-interest-rates-feature-1-description', labels.rateRange],
     ['#loan-interest-rates-feature-2-description', loanComplianceStatus.verifiedTerms[locale].repaymentPeriod],
     ['#loan-interest-rates-feature-3-description', loanComplianceStatus.verifiedTerms[locale].loanAmount],
-    ['#loan-interest-rates-amount-value', loanComplianceStatus.verifiedTerms[locale].exampleAmount],
-    ['#loan-interest-rates-example-description', `${loanComplianceStatus.verifiedTerms[locale].exampleSchedule}. ${loanComplianceStatus.verifiedTerms[locale].exampleInterest}. ${loanComplianceStatus.verifiedTerms[locale].exampleFees} ${labels.totalLabel}: ${loanComplianceStatus.verifiedTerms[locale].exampleTotalPayable}.`],
+    ['#loan-interest-rates-amount-value', loanComplianceStatus.verifiedTerms[locale].exampleCashReceived],
+    ['#loan-interest-rates-example-description', `${loanComplianceStatus.verifiedTerms[locale].exampleTerm}. ${loanComplianceStatus.verifiedTerms[locale].exampleInterest}. ${loanComplianceStatus.verifiedTerms[locale].exampleInstallments}. ${labels.totalLabel}: ${loanComplianceStatus.verifiedTerms[locale].exampleTotalRepaid}. ${labels.aprLabel}: ${loanComplianceStatus.verifiedTerms[locale].exampleApr}.`],
   ];
   forcedLocalizedCopy.forEach(([selector, value]) => replaceElementText(root.querySelector(selector), value));
 

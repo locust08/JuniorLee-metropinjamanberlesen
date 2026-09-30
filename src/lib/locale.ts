@@ -75,6 +75,10 @@ export function getLocalizedPath(locale: SiteLocale, pageId: SitePageId): string
   return slug ? `/${locale}/${slug}` : `/${locale}`;
 }
 
+export function getLocalizedPersonalLoanPath(locale: SiteLocale): string {
+  return `/${locale}/personal-loan`;
+}
+
 function setRecordPath(root: Record<string, unknown>, path: string, value: string): void {
   const keys = path.replace(/\[(\d+)\]/g, '.$1').split('.');
   let current: unknown = root;
@@ -319,6 +323,10 @@ export function localizeLegacyNavigation(
     const href = anchor.getAttribute('href');
     if (href) anchor.setAttribute('href', localizeLegacyHref(href, locale));
   });
+
+  const personalLoanPath = getLocalizedPersonalLoanPath(locale);
+  root.querySelector('#home-loan-option-1-title')?.closest('a')?.setAttribute('href', personalLoanPath);
+  root.querySelector('#site-footer-link-personal-loan')?.setAttribute('href', personalLoanPath);
 
   (activeNavigationIds[pageId] || []).forEach((id) => {
     const link = root.querySelector(`#${id}`);

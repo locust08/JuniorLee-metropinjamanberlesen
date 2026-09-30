@@ -69,6 +69,27 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/loan"/>
   </url>
   <url>
+    <loc>https://www.metropinjamanberlesan.com/en/personal-loan</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/personal-loan"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/personal-loan"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/personal-loan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/personal-loan"/>
+  </url>
+  <url>
+    <loc>https://www.metropinjamanberlesan.com/bm/personal-loan</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/personal-loan"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/personal-loan"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/personal-loan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/personal-loan"/>
+  </url>
+  <url>
+    <loc>https://www.metropinjamanberlesan.com/cn/personal-loan</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/personal-loan"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/personal-loan"/>
+    <xhtml:link rel="alternate" hreflang="zh-Hans" href="https://www.metropinjamanberlesan.com/cn/personal-loan"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.metropinjamanberlesan.com/en/personal-loan"/>
+  </url>
+  <url>
     <loc>https://www.metropinjamanberlesan.com/en/how-to-apply</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.metropinjamanberlesan.com/en/how-to-apply"/>
     <xhtml:link rel="alternate" hreflang="ms" href="https://www.metropinjamanberlesan.com/bm/how-to-apply"/>

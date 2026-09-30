@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { parse } from 'node-html-parser';
 
 import { loadLegacyPage } from '../src/lib/legacyPageData.ts';
+import { loadPersonalLoanPage } from '../src/lib/personalLoanPageData.ts';
+import { calculateRepresentativeCheck } from '../src/lib/loanCompliance.ts';
 
 const originalFetch = globalThis.fetch;
 
@@ -181,7 +183,7 @@ test('contact page metadata uses the configured Kuala Lumpur location', async ()
   assert.doesNotMatch(page.metaDescription, /Pelabuhan Klang|Selangor/);
 });
 
-test('only the localized homepage shows the approved numerical loan-cost disclosure as its last section', async () => {
+test('only the localized Personal Loan page shows the loan-cost disclosure', async () => {
   globalThis.fetch = async () => {
     throw new Error('use the checked-in fallback content');
   };
@@ -198,31 +200,46 @@ test('only the localized homepage shows the approved numerical loan-cost disclos
       const page = await loadLegacyPage(fileName, pageId, locale);
       const root = parse(page.bodyHtml);
       const disclosure = root.querySelector('#personal-loan-costs');
-
+      assert.equal(disclosure, null, `${locale}/${pageId} should not show the disclosure`);
+      assert.equal(
+        root.querySelector('#site-header-apply-now-label')?.getAttribute('href'),
+        `/${locale}/personal-loan#personal-loan-costs`,
+      );
       if (pageId === 'home') {
-        assert.ok(disclosure, `${locale}/${pageId} is missing the disclosure`);
-        assert.match(disclosure.text, /18%/);
-        assert.match(disclosure.text, /RM5,625/);
-        assert.doesNotMatch(disclosure.text, /Awaiting lender verification|Menunggu pengesahan|等待贷款机构核实/);
-
-        const loanOptions = root.querySelector('#home-loan-options-heading')?.closest('section');
-        const finalCallToAction = root.querySelector('#home-ready-to-get-started-heading')?.closest('section');
-        assert.ok(
-          page.bodyHtml.indexOf(loanOptions?.toString() || '') < page.bodyHtml.indexOf(disclosure.toString()),
-          'the disclosure should render after Loan Options',
-        );
-        assert.equal(finalCallToAction?.nextElementSibling?.getAttribute('id'), 'personal-loan-costs');
-        assert.equal(disclosure.nextElementSibling, null, 'the disclosure should be the last homepage section');
-      } else {
-        assert.equal(disclosure, null, `${locale}/${pageId} should not show the disclosure`);
         assert.equal(
-          root.querySelector('#site-header-apply-now-label')?.getAttribute('href'),
-          `/${locale}#personal-loan-costs`,
+          root.querySelector('#home-loan-option-1-title')?.closest('a')?.getAttribute('href'),
+          `/${locale}/personal-loan`,
         );
       }
       assert.doesNotMatch(page.bodyHtml, />\s*(Apply Now|Mohon Sekarang|立即申请)\s*</i);
     }
+
+    const personalLoanPage = await loadPersonalLoanPage(locale);
+    const personalLoanRoot = parse(personalLoanPage.bodyHtml);
+    const disclosure = personalLoanRoot.querySelector('#personal-loan-costs');
+    assert.ok(disclosure, `${locale}/personal-loan is missing the disclosure`);
+    assert.match(disclosure.text, /18%/);
+    assert.match(disclosure.text, /RM5,000/);
+    assert.match(disclosure.text, /12/);
+    assert.doesNotMatch(disclosure.text, /Estimated stamp duty: RM25|RM5,625|RM600 at 12%|RM600 pada kadar 12%|利息为RM600/);
+    assert.equal(personalLoanPage.localizedPaths[locale], `/${locale}/personal-loan`);
   }
+});
+
+test('calculation check matches the conditional RM10 legal and RM30 stamp-duty scenario', () => {
+  assert.deepEqual(calculateRepresentativeCheck({
+    cashReceived: 5000,
+    stampDuty: 30,
+    legalCharge: 10,
+    flatAnnualRate: 0.08,
+    termMonths: 12,
+  }), {
+    financedBalance: 5040,
+    interest: 403.2,
+    installment: 453.6,
+    totalRepaid: 5443.2,
+    nominalAprPercent: 15.98,
+  });
 });
 
 test('published loan terms replace inconsistent pricing while applications remain paused', async () => {
@@ -236,25 +253,25 @@ test('published loan terms replace inconsistent pricing while applications remai
     },
   }));
 
-  const homePage = await loadLegacyPage('index.html', 'home', 'en');
+  const personalLoanPage = await loadPersonalLoanPage('en');
   const loanPage = await loadLegacyPage('loan.html', 'loan', 'en');
   const applicationPage = await loadLegacyPage('how_to_apply.html', 'howToApply', 'en');
   const loanRoot = parse(loanPage.bodyHtml);
   const applicationRoot = parse(applicationPage.bodyHtml);
 
   assert.doesNotMatch(loanPage.bodyHtml, /8%–12% APR|RM448|RM5,448|180-day period/);
-  assert.match(homePage.bodyHtml, /The maximum Annual Percentage Rate \(APR\) is 18%/);
-  assert.match(homePage.bodyHtml, /RM5,625/);
-  assert.match(loanPage.bodyHtml, /6–60 months/);
-  assert.match(loanPage.bodyHtml, /RM500–RM100,000/);
-  assert.match(loanRoot.querySelector('#loan-comparison-disclaimer')?.text || '', /maximum APR and representative example are disclosed on the homepage/);
+  assert.match(personalLoanPage.bodyHtml, /The maximum Annual Percentage Rate \(APR\) is 18%/);
+  assert.match(personalLoanPage.bodyHtml, /Flat interest rates from 8% per annum/);
+  assert.doesNotMatch(personalLoanPage.bodyHtml, /Estimated stamp duty: RM25|RM5,625|RM600 at 12%/);
+  assert.doesNotMatch(loanPage.bodyHtml, /6–60 months|RM500–RM100,000/);
+  assert.match(loanRoot.querySelector('#loan-comparison-disclaimer')?.text || '', /disclosed on the Personal Loan page/);
   applicationRoot.querySelectorAll('button[type="submit"]').forEach((button) => {
     assert.equal(button.getAttribute('disabled'), 'disabled');
     assert.equal(button.getAttribute(':disabled'), undefined);
     assert.equal(button.querySelector('[x-text]'), null);
   });
   applicationRoot.querySelectorAll('form').forEach((form) => {
-    assert.equal(form.getAttribute('action'), '/en#personal-loan-costs');
+    assert.equal(form.getAttribute('action'), '/en/personal-loan#personal-loan-costs');
     assert.equal(form.getAttribute('x-on:submit.prevent'), '');
     assert.equal(form.getAttribute('aria-describedby'), undefined);
   });
