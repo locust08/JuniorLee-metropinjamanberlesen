@@ -25,6 +25,7 @@ type PublishedLoanTerms = {
 export const loanComplianceStatus = {
   costsPublished: true,
   applicationsEnabled: false,
+  appointmentEnquiriesEnabled: true,
   verifiedTerms: {
     en: {
       loanAmount: 'Available amounts are limited to combinations verified at or below 18% APR. The advertised RM500 minimum is withheld pending fee validation.',
@@ -81,6 +82,7 @@ export const loanComplianceStatus = {
 } satisfies {
   costsPublished: boolean;
   applicationsEnabled: boolean;
+  appointmentEnquiriesEnabled: boolean;
   verifiedTerms: Record<SiteLocale, PublishedLoanTerms>;
 };
 
@@ -353,6 +355,9 @@ export function applyLoanCompliance(html: string, locale: SiteLocale, pageId: Si
       anchor.removeAttribute('target');
       replaceElementText(anchor, labels.applicationPaused);
     });
+  }
+
+  if (!loanComplianceStatus.appointmentEnquiriesEnabled) {
     root.querySelectorAll('button[type="submit"]').forEach((button) => {
       button.removeAttribute(':disabled');
       button.removeAttribute('x-bind:disabled');
@@ -365,6 +370,9 @@ export function applyLoanCompliance(html: string, locale: SiteLocale, pageId: Si
       form.setAttribute('x-on:submit.prevent', '');
       form.removeAttribute('aria-describedby');
     });
+  }
+
+  if (!loanComplianceStatus.applicationsEnabled) {
     ['site-header-apply-now-label', 'site-header-mobile-drawer-primary-apply-now-label', 'site-header-mobile-drawer-secondary-apply-now-label'].forEach((id) => {
       const link = root.querySelector(`#${id}`);
       if (!link) return;

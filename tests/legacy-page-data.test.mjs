@@ -220,7 +220,9 @@ test('only the localized Personal Loan page shows the loan-cost disclosure', asy
           `/${locale}/personal-loan`,
         );
       }
-      assert.doesNotMatch(page.bodyHtml, />\s*(Apply Now|Mohon Sekarang|立即申请)\s*</i);
+      root.querySelectorAll('a').forEach((anchor) => {
+        assert.doesNotMatch(anchor.text, /^\s*(Apply Now|Mohon Sekarang|立即申请)\s*$/i);
+      });
     }
 
     const personalLoanPage = await loadPersonalLoanPage(locale);
@@ -253,7 +255,7 @@ test('calculation check matches the conditional RM10 legal and RM30 stamp-duty s
   });
 });
 
-test('published loan terms replace inconsistent pricing while applications remain paused', async () => {
+test('published loan terms replace inconsistent pricing while appointment enquiries remain enabled', async () => {
   globalThis.fetch = async () => new Response(JSON.stringify({
     loanPage: {
       comparison: { rows: [{}, { personalValue: '8%–12% APR', businessValue: '8%–12% APR' }] },
@@ -266,9 +268,11 @@ test('published loan terms replace inconsistent pricing while applications remai
 
   const personalLoanPage = await loadPersonalLoanPage('en');
   const loanPage = await loadLegacyPage('loan.html', 'loan', 'en');
-  const applicationPage = await loadLegacyPage('how_to_apply.html', 'howToApply', 'en');
+  const appointmentPages = await Promise.all([
+    loadLegacyPage('how_to_apply.html', 'howToApply', 'en'),
+    loadLegacyPage('contact.html', 'contactUs', 'en'),
+  ]);
   const loanRoot = parse(loanPage.bodyHtml);
-  const applicationRoot = parse(applicationPage.bodyHtml);
 
   assert.doesNotMatch(loanPage.bodyHtml, /8%–12% APR|RM448|RM5,448|180-day period/);
   assert.match(personalLoanPage.bodyHtml, /The maximum Annual Percentage Rate \(APR\) is 18%/);
@@ -276,14 +280,16 @@ test('published loan terms replace inconsistent pricing while applications remai
   assert.doesNotMatch(personalLoanPage.bodyHtml, /Estimated stamp duty: RM25|RM5,625|RM600 at 12%/);
   assert.doesNotMatch(loanPage.bodyHtml, /6–60 months|RM500–RM100,000/);
   assert.match(loanRoot.querySelector('#loan-comparison-disclaimer')?.text || '', /disclosed on the Personal Loan page/);
-  applicationRoot.querySelectorAll('button[type="submit"]').forEach((button) => {
-    assert.equal(button.getAttribute('disabled'), 'disabled');
-    assert.equal(button.getAttribute(':disabled'), undefined);
-    assert.equal(button.querySelector('[x-text]'), null);
-  });
-  applicationRoot.querySelectorAll('form').forEach((form) => {
-    assert.equal(form.getAttribute('action'), '/en/personal-loan#personal-loan-costs');
-    assert.equal(form.getAttribute('x-on:submit.prevent'), '');
-    assert.equal(form.getAttribute('aria-describedby'), undefined);
+  const appointmentButtonIds = ['#how-to-apply-ready-submit-label', '#contact-form-submit-label'];
+  appointmentPages.forEach((appointmentPage, index) => {
+    const appointmentRoot = parse(appointmentPage.bodyHtml);
+    const button = appointmentRoot.querySelector(appointmentButtonIds[index]);
+    const form = button?.closest('form');
+    assert.ok(button);
+    assert.equal(button.getAttribute('disabled'), undefined);
+    assert.equal(button.getAttribute(':disabled'), 'loading');
+    assert.ok(form);
+    assert.equal(form.getAttribute('action'), '');
+    assert.equal(form.getAttribute('x-on:submit.prevent'), 'submitBooking()');
   });
 });
