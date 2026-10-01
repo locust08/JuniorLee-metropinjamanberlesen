@@ -10,7 +10,7 @@ import {
 
 const env = {
   NOTION_TOKEN: 'test-token',
-  APPOINTMENT_NOTION_DATABASE_ID: 'fa9a71965f8d40ff92276ba56aa2d69f',
+  NOTION_BOOKING_DATABASE_ID: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
   BOOKING_EMAILS_ENABLED: 'true',
   RESEND_API_KEY: 'test-resend',
   RESEND_TO_EMAIL: 'admin@example.com',
@@ -35,13 +35,20 @@ function notionPage(id = 'page-id') {
     id,
     url: `https://notion.so/${id}`,
     properties: {
-      'Full Name': { title: [{ plain_text: 'Metro QA' }] },
-      'Contact Number': { phone_number: '01100000099' },
+      Booking: { title: [{ plain_text: 'Metro QA' }] },
+      'Customer Name': { rich_text: [{ plain_text: 'Metro QA' }] },
+      Phone: { phone_number: '+601100000099' },
       Email: { email: 'metro.qa@example.com' },
       'Loan Type': { select: { name: 'Personal Loan' } },
       'Message / Enquiry': { rich_text: [{ plain_text: 'Internal regression test.' }] },
-      'Preferred Date': { date: { start: '2026-08-15' } },
-      'Preferred Time': { rich_text: [{ plain_text: '09:00' }] },
+      'Preferred Slot': {
+        date: {
+          start: '2026-08-15T09:00:00+08:00',
+          end: '2026-08-15T09:30:00+08:00',
+        },
+      },
+      'Slot Key': { rich_text: [{ plain_text: '2026-08-15|09:00' }] },
+      Status: { select: { name: 'Confirmed - Booked' } },
       'Cancel Token': { rich_text: [{ plain_text: 'test-token' }] },
       'Cancel URL': { url: '' },
       Source: { select: { name: 'Website' } },
@@ -70,10 +77,13 @@ test('booking API succeeds when post-booking notifications fail', async () => {
   const calls = [];
   const resendPayloads = [];
   let createdPagePayload;
+  let updatedPagePayload;
+  let queryPayload;
 
   globalThis.fetch = async (url, options = {}) => {
     calls.push(String(url));
     if (String(url).includes('/databases/') && String(url).endsWith('/query')) {
+      queryPayload = JSON.parse(options.body);
       return Response.json({ results: [] });
     }
     if (String(url).endsWith('/pages') && options.method === 'POST') {
@@ -81,6 +91,7 @@ test('booking API succeeds when post-booking notifications fail', async () => {
       return Response.json(notionPage('created-page'));
     }
     if (String(url).includes('/pages/created-page') && options.method === 'PATCH') {
+      updatedPagePayload = JSON.parse(options.body);
       return Response.json(notionPage('created-page'));
     }
     if (String(url).includes('api.resend.com')) {
@@ -112,22 +123,25 @@ test('booking API succeeds when post-booking notifications fail', async () => {
       'Your booking was saved, but a WhatsApp notification could not be sent.',
     ]);
     assert.ok(calls.some((url) => url.includes('/pages')));
-    assert.equal(
-      createdPagePayload.properties['Preferred Date'].date.start,
-      validPayload.date,
-    );
-    assert.equal(
-      createdPagePayload.properties['Preferred Time'].rich_text[0].text.content,
-      validPayload.time,
-    );
-    assert.equal(
-      createdPagePayload.properties.Location.rich_text[0].text.content,
-      validPayload.location,
-    );
-    assert.match(
-      createdPagePayload.properties.submission_timestamp.date.start,
-      /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
-    );
+    assert.deepEqual(queryPayload.filter, {
+      property: 'Slot Key',
+      rich_text: { equals: '2026-08-15|09:00' },
+    });
+    assert.equal(createdPagePayload.parent.database_id, env.NOTION_BOOKING_DATABASE_ID);
+    assert.equal(createdPagePayload.properties.Booking.title[0].text.content, 'Metro QA');
+    assert.equal(createdPagePayload.properties['Customer Name'].rich_text[0].text.content, 'Metro QA');
+    assert.equal(createdPagePayload.properties.Phone.phone_number, '+601100000099');
+    assert.deepEqual(createdPagePayload.properties['Preferred Slot'].date, {
+      start: '2026-08-15T09:00:00+08:00',
+      end: '2026-08-15T09:30:00+08:00',
+    });
+    assert.equal(createdPagePayload.properties['Slot Key'].rich_text[0].text.content, '2026-08-15|09:00');
+    assert.equal(createdPagePayload.properties.Status.select.name, 'Confirmed - Booked');
+    assert.equal(createdPagePayload.properties.Source.select.name, 'Website');
+    assert.equal(createdPagePayload.properties['Cancel Token'].rich_text[0].text.content.length, 48);
+    assert.match(updatedPagePayload.properties['Cancel URL'].url, /\/api\/bookings\/cancel\?id=created-page&token=/);
+    assert.equal(Object.hasOwn(createdPagePayload.properties, 'Location'), false);
+    assert.equal(Object.hasOwn(createdPagePayload.properties, 'submission_timestamp'), false);
     assert.equal(resendPayloads.length, 2);
     assert.deepEqual(resendPayloads.map((payload) => payload.to), [
       ['admin@example.com'],
@@ -142,7 +156,7 @@ test('booking API succeeds when post-booking notifications fail', async () => {
     assert.doesNotMatch(applicantEmail.html, /Confirm Appointment|Cancel Appointment/i);
     assert.match(applicantEmail.html, /WhatsApp Us/);
     assert.equal(
-      Object.hasOwn(createdPagePayload.properties, 'Preferred Date & Time'),
+      Object.hasOwn(createdPagePayload.properties, 'Preferred Date'),
       false,
     );
   } finally {

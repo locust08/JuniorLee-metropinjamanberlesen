@@ -6,25 +6,27 @@ import { buildCalendarInvite, getConfig } from '../functions/_lib/booking.js';
 test('normalizes Notion database IDs from full Notion URLs', () => {
   const config = getConfig({
     NOTION_TOKEN: 'test-token',
-    APPOINTMENT_NOTION_DATABASE_ID: 'https://www.notion.so/workspace/Appointment-Bookings-fa9a71965f8d40ff92276ba56aa2d69f?v=abcdef',
+    NOTION_BOOKING_DATABASE_ID: 'https://www.notion.so/workspace/Appointment-Bookings-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa?v=abcdef',
   });
 
-  assert.equal(config.notionDatabaseId, 'fa9a71965f8d40ff92276ba56aa2d69f');
+  assert.equal(config.notionDatabaseId, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 });
 
 test('normalizes Notion database IDs from collection URLs and hyphenated IDs', () => {
   const config = getConfig({
     NOTION_TOKEN: 'test-token',
-    APPOINTMENT_NOTION_DATABASE_ID: 'collection://fa9a7196-5f8d-40ff-9227-6ba56aa2d69f',
+    NOTION_BOOKING_DATABASE_ID: 'collection://aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
     VISITOR_EVENTS_NOTION_DATABASE_ID: 'collection://3984fcc4-f701-80ec-8e27-f466ebc06223',
   });
 
-  assert.equal(config.notionDatabaseId, 'fa9a71965f8d40ff92276ba56aa2d69f');
+  assert.equal(config.notionDatabaseId, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
   assert.equal(config.visitorEventsDatabaseId, '3984fcc4f70180ec8e27f466ebc06223');
 });
 
-test('loads dedicated contact storage configuration', () => {
+test('uses only the dedicated booking database configuration', () => {
   const config = getConfig({
+    NOTION_BOOKING_DATABASE_ID: 'https://www.notion.so/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    NOTION_DATABASE_ID: 'https://www.notion.so/11111111111111111111111111111111',
     CONTACT_NOTION_DATABASE_ID: 'https://www.notion.so/d94340aee05341d8b2b682ff856d2ddf',
     CONTACT_GOOGLE_SPREADSHEET_ID: 'sheet-id',
     CONTACT_GOOGLE_SHEET_NAME: 'Contact Form',
@@ -34,12 +36,21 @@ test('loads dedicated contact storage configuration', () => {
   });
 
   assert.equal(config.contactNotionDatabaseId, 'd94340aee05341d8b2b682ff856d2ddf');
-  assert.equal(config.notionDatabaseId, 'd94340aee05341d8b2b682ff856d2ddf');
+  assert.equal(config.notionDatabaseId, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
   assert.equal(config.contactGoogleSpreadsheetId, 'sheet-id');
   assert.equal(config.contactGoogleSheetName, 'Contact Form');
   assert.equal(config.googleOAuthClientId, 'client-id');
   assert.equal(config.googleOAuthClientSecret, 'client-secret');
   assert.equal(config.googleOAuthRefreshToken, 'refresh-token');
+});
+
+test('does not fall back to the unrelated generic Notion database', () => {
+  const config = getConfig({
+    NOTION_DATABASE_ID: '11111111111111111111111111111111',
+    CONTACT_NOTION_DATABASE_ID: '22222222222222222222222222222222',
+  });
+
+  assert.equal(config.notionDatabaseId, '');
 });
 
 test('enables booking emails unless explicitly disabled by environment', () => {

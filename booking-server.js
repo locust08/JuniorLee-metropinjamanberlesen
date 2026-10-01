@@ -9,11 +9,7 @@ const DATA_DIR = path.join(__dirname, 'data');
 const BOOKINGS_FILE = path.join(DATA_DIR, 'bookings.json');
 
 const NOTION_TOKEN = process.env.NOTION_TOKEN || '';
-const NOTION_DATABASE_ID =
-  process.env.APPOINTMENT_NOTION_DATABASE_ID
-  || process.env.CONTACT_NOTION_DATABASE_ID
-  || process.env.NOTION_DATABASE_ID
-  || 'fa9a71965f8d40ff92276ba56aa2d69f';
+const NOTION_BOOKING_DATABASE_ID = process.env.NOTION_BOOKING_DATABASE_ID || '';
 const NOTION_VERSION = '2022-06-28';
 const GOOGLE_OAUTH_TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
 const GOOGLE_SHEETS_API_HOST = 'https://sheets.googleapis.com/v4/spreadsheets';
@@ -116,18 +112,23 @@ function notionSlotKey(page) {
     .join('');
   if (storedKey) return storedKey;
 
-  const date = properties['Preferred Date']?.date?.start?.slice(0, 10) || '';
-  const time = properties['Preferred Time']?.rich_text
-    ?.map((part) => part.plain_text)
-    .join('') || '';
-  return date && time ? `${date}|${time}` : '';
+  const preferredSlot = cleanValue(properties['Preferred Slot']?.date?.start);
+  const match = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(preferredSlot);
+  return match ? `${match[1]}|${match[2]}` : '';
 }
 
-function preferredSlotDayFilter(date) {
-  return {
-    property: 'Preferred Date',
-    date: { equals: date },
-  };
+function preferredSlotDayFilters(date) {
+  const nextDay = addMinutesToWallClock(date, '00:00', 24 * 60).date;
+  return [
+    {
+      property: 'Preferred Slot',
+      date: { on_or_after: `${date}T00:00:00+08:00` },
+    },
+    {
+      property: 'Preferred Slot',
+      date: { before: `${nextDay}T00:00:00+08:00` },
+    },
+  ];
 }
 
 function addMinutes(date, minutes) {
@@ -267,12 +268,12 @@ function slotStart(date, time) {
 
 function notionDateTime(date, time) {
   const parsed = addMinutesToWallClock(date, time, 0);
-  return `${parsed.date}T${parsed.time}:00`;
+  return `${parsed.date}T${parsed.time}:00+08:00`;
 }
 
 function notionEndDateTime(date, time) {
   const end = addMinutesToWallClock(date, time, DEFAULT_APPOINTMENT_DURATION_MINUTES);
-  return `${end.date}T${end.time}:00`;
+  return `${end.date}T${end.time}:00+08:00`;
 }
 
 function addMinutesToWallClock(date, time, minutesToAdd) {
@@ -801,25 +802,26 @@ async function notionRequest(pathname, options = {}) {
   });
 
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Notion API error ${response.status}: ${text}`);
+    const errorBody = await response.json().catch(() => ({}));
+    const errorCode = cleanValue(errorBody.code) || 'unknown_error';
+    const errorMessage = cleanValue(errorBody.message) || 'Request failed.';
+    throw new Error(
+      `Notion request failed (${response.status}, ${errorCode}): ${errorMessage.slice(0, 300)}`,
+    );
   }
 
   return response.json();
 }
 
 async function findActiveNotionBooking(key) {
-  if (!NOTION_TOKEN) return null;
-  const [date, time] = key.split('|');
+  if (!NOTION_TOKEN || !NOTION_BOOKING_DATABASE_ID) return null;
 
-  const result = await notionRequest(`/databases/${NOTION_DATABASE_ID}/query`, {
+  const result = await notionRequest(`/databases/${NOTION_BOOKING_DATABASE_ID}/query`, {
     method: 'POST',
     body: JSON.stringify({
       filter: {
-        and: [
-          preferredSlotDayFilter(date),
-          { property: 'Preferred Time', rich_text: { equals: time } },
-        ],
+        property: 'Slot Key',
+        rich_text: { equals: key },
       },
       page_size: 1,
     }),
@@ -829,13 +831,13 @@ async function findActiveNotionBooking(key) {
 }
 
 async function findActiveNotionBookingsForDate(date) {
-  if (!NOTION_TOKEN) return [];
+  if (!NOTION_TOKEN || !NOTION_BOOKING_DATABASE_ID) return [];
 
-  const result = await notionRequest(`/databases/${NOTION_DATABASE_ID}/query`, {
+  const result = await notionRequest(`/databases/${NOTION_BOOKING_DATABASE_ID}/query`, {
     method: 'POST',
     body: JSON.stringify({
       filter: {
-        and: [preferredSlotDayFilter(date)],
+        and: preferredSlotDayFilters(date),
       },
       page_size: 100,
     }),
@@ -858,26 +860,34 @@ async function updateNotionBookingStatus(pageId, status) {
 }
 
 async function createNotionBooking(payload, key) {
-  if (!NOTION_TOKEN) return null;
+  if (!NOTION_TOKEN || !NOTION_BOOKING_DATABASE_ID) return null;
 
   return notionRequest('/pages', {
     method: 'POST',
     body: JSON.stringify({
-      parent: { database_id: NOTION_DATABASE_ID },
+      parent: { database_id: NOTION_BOOKING_DATABASE_ID },
       properties: {
-        'Full Name': { title: [{ text: { content: payload.name || '' } }] },
-        'Preferred Date': { date: { start: payload.date } },
-        'Preferred Time': { rich_text: [{ text: { content: payload.time } }] },
-        'Contact Number': payload.phone ? { phone_number: payload.phone } : { phone_number: null },
+        Booking: { title: [{ text: { content: payload.name || '' } }] },
+        'Customer Name': { rich_text: [{ text: { content: payload.name || '' } }] },
+        'Preferred Slot': {
+          date: {
+            start: notionDateTime(payload.date, payload.time),
+            end: notionEndDateTime(payload.date, payload.time),
+          },
+        },
+        'Slot Key': { rich_text: [{ text: { content: key } }] },
+        Phone: payload.phone ? { phone_number: payload.phone } : { phone_number: null },
         Email: payload.email ? { email: payload.email } : { email: null },
         'Loan Type': { select: { name: payload.loanType } },
-        Location: {
-          rich_text: cleanValue(payload.location)
-            ? [{ text: { content: cleanValue(payload.location) } }]
+        'Message / Enquiry': {
+          rich_text: cleanValue(payload.message)
+            ? [{ text: { content: cleanValue(payload.message) } }]
             : [],
         },
-        'Message / Enquiry': { rich_text: [{ text: { content: payload.message || '' } }] },
-        submission_timestamp: { date: { start: payload.submissionTimestamp || payload.submittedAt } },
+        Status: { select: { name: payload.status } },
+        'Cancel Token': { rich_text: [{ text: { content: payload.cancelToken } }] },
+        'Cancel URL': { url: payload.cancelUrl },
+        Source: { select: { name: payload.source || 'Website' } },
       },
     }),
   });
@@ -951,6 +961,14 @@ async function handleCreateBooking(req, res) {
     booking.notionUrl = notionPage.url;
     booking.cancelUrl = `${BOOKING_BASE_URL}/api/bookings/cancel?id=${encodeURIComponent(notionPage.id)}&token=${encodeURIComponent(booking.cancelToken)}`;
     booking.confirmUrl = `${BOOKING_BASE_URL}/api/bookings/confirm?id=${encodeURIComponent(notionPage.id)}&token=${encodeURIComponent(booking.cancelToken)}`;
+    await notionRequest(`/pages/${notionPage.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        properties: {
+          'Cancel URL': { url: booking.cancelUrl },
+        },
+      }),
+    });
   }
 
   bookings.push(booking);

@@ -3,7 +3,6 @@ const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const WHATSAPP_GRAPH_HOST = 'https://graph.facebook.com';
 const GOOGLE_OAUTH_TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
 const GOOGLE_SHEETS_API_HOST = 'https://sheets.googleapis.com/v4/spreadsheets';
-const DEFAULT_DATABASE_ID = 'fa9a71965f8d40ff92276ba56aa2d69f';
 const DEFAULT_VISITOR_EVENTS_DATABASE_ID = '3984fcc4f70180ec8e27f466ebc06223';
 const DEFAULT_APPOINTMENT_DURATION_MINUTES = 30;
 const BOOKING_EMAILS_TEMPORARILY_DISABLED = false;
@@ -73,12 +72,12 @@ export function addMinutes(date, minutes) {
 
 export function notionDateTime(date, time) {
   const { date: parsedDate, time: parsedTime } = addMinutesToWallClock(date, time, 0);
-  return `${parsedDate}T${parsedTime}:00`;
+  return `${parsedDate}T${parsedTime}:00+08:00`;
 }
 
 export function notionEndDateTime(date, time) {
   const end = addMinutesToWallClock(date, time, DEFAULT_APPOINTMENT_DURATION_MINUTES);
-  return `${end.date}T${end.time}:00`;
+  return `${end.date}T${end.time}:00+08:00`;
 }
 
 export function addMinutesToWallClock(date, time, minutesToAdd) {
@@ -116,12 +115,7 @@ export function addMinutesToWallClock(date, time, minutesToAdd) {
 export function getConfig(env) {
   return {
     notionToken: env.NOTION_TOKEN || '',
-    notionDatabaseId: normalizeNotionDatabaseId(
-      env.APPOINTMENT_NOTION_DATABASE_ID
-        || env.CONTACT_NOTION_DATABASE_ID
-        || env.NOTION_DATABASE_ID,
-      DEFAULT_DATABASE_ID,
-    ),
+    notionDatabaseId: normalizeNotionDatabaseId(env.NOTION_BOOKING_DATABASE_ID),
     contactNotionDatabaseId: normalizeNotionDatabaseId(env.CONTACT_NOTION_DATABASE_ID),
     contactGoogleSpreadsheetId: cleanValue(env.CONTACT_GOOGLE_SPREADSHEET_ID),
     contactGoogleSheetName: cleanValue(env.CONTACT_GOOGLE_SHEET_NAME) || 'Contact Form',
@@ -183,22 +177,25 @@ export async function notionRequest(config, pathname, options = {}) {
   });
 
   if (!response.ok) {
-    throw new Error(`Notion API error ${response.status}: ${(await response.text()).slice(0, 500)}`);
+    const errorBody = await response.json().catch(() => ({}));
+    const errorCode = cleanValue(errorBody.code) || 'unknown_error';
+    const errorMessage = cleanValue(errorBody.message) || 'Request failed.';
+    throw new Error(
+      `Notion request failed (${response.status}, ${errorCode}): ${errorMessage.slice(0, 300)}`,
+    );
   }
 
   return response.json();
 }
 
 export async function findActiveBookingBySlot(config, key) {
-  const [date, time] = key.split('|');
+  requireBookingDatabase(config);
   const result = await notionRequest(config, `/databases/${config.notionDatabaseId}/query`, {
     method: 'POST',
     body: JSON.stringify({
       filter: {
-        and: [
-          preferredSlotDayFilter(date),
-          { property: 'Preferred Time', rich_text: { equals: time } },
-        ],
+        property: 'Slot Key',
+        rich_text: { equals: key },
       },
       page_size: 1,
     }),
@@ -208,11 +205,12 @@ export async function findActiveBookingBySlot(config, key) {
 }
 
 export async function findActiveBookingsForDate(config, date) {
+  requireBookingDatabase(config);
   const result = await notionRequest(config, `/databases/${config.notionDatabaseId}/query`, {
     method: 'POST',
     body: JSON.stringify({
       filter: {
-        and: [preferredSlotDayFilter(date)],
+        and: preferredSlotDayFilters(date),
       },
       page_size: 100,
     }),
@@ -235,18 +233,29 @@ function slotKeyFromPage(page) {
     .join('');
   if (storedKey) return storedKey;
 
-  const date = properties['Preferred Date']?.date?.start?.slice(0, 10) || '';
-  const time = properties['Preferred Time']?.rich_text
-    ?.map((part) => part.plain_text)
-    .join('') || '';
-  return date && time ? `${date}|${time}` : '';
+  const preferredSlot = cleanValue(properties['Preferred Slot']?.date?.start);
+  const match = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(preferredSlot);
+  return match ? `${match[1]}|${match[2]}` : '';
 }
 
-function preferredSlotDayFilter(date) {
-  return {
-    property: 'Preferred Date',
-    date: { equals: date },
-  };
+function preferredSlotDayFilters(date) {
+  const nextDay = addMinutesToWallClock(date, '00:00', 24 * 60).date;
+  return [
+    {
+      property: 'Preferred Slot',
+      date: { on_or_after: `${date}T00:00:00+08:00` },
+    },
+    {
+      property: 'Preferred Slot',
+      date: { before: `${nextDay}T00:00:00+08:00` },
+    },
+  ];
+}
+
+function requireBookingDatabase(config) {
+  if (!config.notionDatabaseId) {
+    throw new Error('NOTION_BOOKING_DATABASE_ID is not configured.');
+  }
 }
 
 export function randomToken() {
@@ -277,12 +286,12 @@ export function pageToBooking(page) {
     id: page.id,
     notionPageId: page.id,
     notionUrl: page.url,
-    name: props['Full Name']?.title?.map((part) => part.plain_text).join('') || '',
+    name: props['Customer Name']?.rich_text?.map((part) => part.plain_text).join('') || '',
     email: props.Email?.email || '',
-    phone: props['Contact Number']?.phone_number || '',
+    phone: props.Phone?.phone_number || '',
     loanType: props['Loan Type']?.select?.name || '',
     message: props['Message / Enquiry']?.rich_text?.map((part) => part.plain_text).join('') || '',
-    status: 'Confirmed - Booked',
+    status: props.Status?.select?.name || '',
     slotKey: key,
     date,
     time,
@@ -293,26 +302,31 @@ export function pageToBooking(page) {
 }
 
 export async function createBookingPage(config, payload) {
+  requireBookingDatabase(config);
   const token = randomToken();
+  const key = slotKey(payload.date, payload.time);
   const properties = {
-    'Full Name': { title: [{ text: { content: cleanValue(payload.name) } }] },
-    'Preferred Date': { date: { start: payload.date } },
-    'Preferred Time': { rich_text: [{ text: { content: payload.time } }] },
-    'Contact Number': { phone_number: cleanValue(payload.phone) },
+    Booking: { title: [{ text: { content: cleanValue(payload.name) } }] },
+    'Customer Name': { rich_text: [{ text: { content: cleanValue(payload.name) } }] },
+    'Preferred Slot': {
+      date: {
+        start: notionDateTime(payload.date, payload.time),
+        end: notionEndDateTime(payload.date, payload.time),
+      },
+    },
+    'Slot Key': { rich_text: [{ text: { content: key } }] },
+    Phone: { phone_number: cleanValue(payload.phone) },
     Email: { email: cleanValue(payload.email) },
     'Loan Type': { select: { name: cleanValue(payload.loanType) } },
-    Location: {
-      rich_text: cleanValue(payload.location)
-        ? [{ text: { content: cleanValue(payload.location) } }]
+    'Message / Enquiry': {
+      rich_text: cleanValue(payload.message)
+        ? [{ text: { content: cleanValue(payload.message) } }]
         : [],
     },
-    'Message / Enquiry': { rich_text: [{ text: { content: cleanValue(payload.message) } }] },
+    Status: { select: { name: 'Confirmed - Booked' } },
+    'Cancel Token': { rich_text: [{ text: { content: token } }] },
+    Source: { select: { name: 'Website' } },
   };
-  if (payload.submissionTimestamp) {
-    properties.submission_timestamp = {
-      date: { start: payload.submissionTimestamp },
-    };
-  }
 
   const page = await notionRequest(config, '/pages', {
     method: 'POST',
@@ -324,6 +338,14 @@ export async function createBookingPage(config, payload) {
 
   const realCancelUrl = `${config.bookingBaseUrl}/api/bookings/cancel?id=${page.id}&token=${token}`;
   const confirmUrl = `${config.bookingBaseUrl}/api/bookings/confirm?id=${page.id}&token=${token}`;
+  await notionRequest(config, `/pages/${page.id}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      properties: {
+        'Cancel URL': { url: realCancelUrl },
+      },
+    }),
+  });
   return { ...pageToBooking(page), id: page.id, cancelToken: token, cancelUrl: realCancelUrl, confirmUrl, date: payload.date, time: payload.time };
 }
 

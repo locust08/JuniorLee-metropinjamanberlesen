@@ -49,7 +49,7 @@ export async function onRequestGet({ request, env }) {
 
   return jsonResponse({
     env: {
-      APPOINTMENT_NOTION_DATABASE_ID: Boolean(env.APPOINTMENT_NOTION_DATABASE_ID),
+      NOTION_BOOKING_DATABASE_ID: Boolean(env.NOTION_BOOKING_DATABASE_ID),
       NOTION_DATABASE_ID: Boolean(env.NOTION_DATABASE_ID),
       NOTION_TOKEN: Boolean(env.NOTION_TOKEN),
       RESEND_API_KEY: Boolean(env.RESEND_API_KEY),
