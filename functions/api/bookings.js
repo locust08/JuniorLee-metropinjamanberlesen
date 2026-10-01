@@ -1,4 +1,5 @@
 import {
+  backupBookingToD1,
   cleanValue,
   createContactSubmissionPage,
   createBookingPage,
@@ -66,10 +67,14 @@ export async function onRequestPost({ request, env }) {
       config.contactNotionDatabaseId === config.notionDatabaseId
         ? Promise.resolve({ ok: true, skipped: true })
         : createContactSubmissionPage(config, contactPayload);
-    const [contactNotionResult, contactGoogleSheetResult] = await Promise.all([
+    const [d1BackupResult, contactNotionResult, contactGoogleSheetResult] = await Promise.all([
+      backupBookingToD1(env.BOOKING_BACKUP_DB, booking, contactPayload),
       contactNotionPromise,
       appendContactSubmissionToGoogleSheet(config, contactPayload),
     ]);
+    if (!d1BackupResult.ok) {
+      console.error('[booking] D1 backup failed:', d1BackupResult.error);
+    }
     if (!contactNotionResult.ok) {
       console.error('[booking] Contact Notion storage failed:', contactNotionResult.error);
     }
@@ -99,6 +104,9 @@ export async function onRequestPost({ request, env }) {
     }
     if (!contactGoogleSheetResult.ok) {
       warnings.push('Your booking was saved, but the contact details could not be copied to the contact Google Sheet.');
+    }
+    if (!d1BackupResult.ok) {
+      warnings.push('Your booking was saved, but the Cloudflare backup could not be created.');
     }
 
     return jsonResponse({ message: 'Booking submitted.', booking, warnings }, 201);

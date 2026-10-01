@@ -349,6 +349,74 @@ export async function createBookingPage(config, payload) {
   return { ...pageToBooking(page), id: page.id, cancelToken: token, cancelUrl: realCancelUrl, confirmUrl, date: payload.date, time: payload.time };
 }
 
+export async function backupBookingToD1(database, booking, payload = {}) {
+  if (!database) return { ok: true, skipped: true };
+
+  try {
+    const submittedAt = cleanValue(payload.submissionTimestamp) || new Date().toISOString();
+    const lastSyncedAt = new Date().toISOString();
+    await database.prepare(`
+      INSERT INTO appointment_booking_backups (
+        notion_page_id,
+        customer_name,
+        email,
+        phone,
+        loan_type,
+        location,
+        preferred_date,
+        preferred_time,
+        slot_key,
+        message,
+        status,
+        source,
+        cancel_token,
+        cancel_url,
+        notion_url,
+        submitted_at,
+        last_synced_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(notion_page_id) DO UPDATE SET
+        customer_name = excluded.customer_name,
+        email = excluded.email,
+        phone = excluded.phone,
+        loan_type = excluded.loan_type,
+        location = excluded.location,
+        preferred_date = excluded.preferred_date,
+        preferred_time = excluded.preferred_time,
+        slot_key = excluded.slot_key,
+        message = excluded.message,
+        status = excluded.status,
+        source = excluded.source,
+        cancel_token = excluded.cancel_token,
+        cancel_url = excluded.cancel_url,
+        notion_url = excluded.notion_url,
+        last_synced_at = excluded.last_synced_at
+    `).bind(
+      cleanValue(booking.id || booking.notionPageId),
+      cleanValue(booking.name || payload.name),
+      cleanValue(booking.email || payload.email),
+      cleanValue(booking.phone || payload.phone),
+      cleanValue(booking.loanType || payload.loanType),
+      cleanValue(payload.location),
+      cleanValue(booking.date || payload.date),
+      cleanValue(booking.time || payload.time),
+      cleanValue(booking.slotKey || slotKey(payload.date, payload.time)),
+      cleanValue(booking.message || payload.message),
+      cleanValue(booking.status) || 'Confirmed - Booked',
+      cleanValue(booking.source) || 'Website',
+      cleanValue(booking.cancelToken),
+      cleanValue(booking.cancelUrl),
+      cleanValue(booking.notionUrl),
+      submittedAt,
+      lastSyncedAt,
+    ).run();
+
+    return { ok: true, skipped: false };
+  } catch (error) {
+    return { ok: false, skipped: false, error: error.message };
+  }
+}
+
 export async function createContactSubmissionPage(config, payload) {
   if (!config.contactNotionDatabaseId) {
     return { ok: true, skipped: true };

@@ -79,6 +79,17 @@ test('booking API succeeds when post-booking notifications fail', async () => {
   let createdPagePayload;
   let updatedPagePayload;
   let queryPayload;
+  let d1Backup;
+  const bookingBackupDatabase = {
+    prepare(sql) {
+      return {
+        bind(...values) {
+          d1Backup = { sql, values };
+          return { run: async () => ({ success: true }) };
+        },
+      };
+    },
+  };
 
   globalThis.fetch = async (url, options = {}) => {
     calls.push(String(url));
@@ -106,7 +117,7 @@ test('booking API succeeds when post-booking notifications fail', async () => {
 
   try {
     const response = await onRequestPost({
-      env,
+      env: { ...env, BOOKING_BACKUP_DB: bookingBackupDatabase },
       request: new Request('https://metropinjamanberlesen.pages.dev/api/bookings', {
         method: 'POST',
         body: JSON.stringify(validPayload),
@@ -142,6 +153,19 @@ test('booking API succeeds when post-booking notifications fail', async () => {
     assert.match(updatedPagePayload.properties['Cancel URL'].url, /\/api\/bookings\/cancel\?id=created-page&token=/);
     assert.equal(Object.hasOwn(createdPagePayload.properties, 'Location'), false);
     assert.equal(Object.hasOwn(createdPagePayload.properties, 'submission_timestamp'), false);
+    assert.match(d1Backup.sql, /INSERT INTO appointment_booking_backups/);
+    assert.deepEqual(d1Backup.values.slice(0, 10), [
+      'created-page',
+      'Metro QA',
+      'metro.qa@example.com',
+      '+601100000099',
+      'Personal Loan',
+      'Selangor',
+      '2026-08-15',
+      '09:00',
+      '2026-08-15|09:00',
+      'Internal regression test.',
+    ]);
     assert.equal(resendPayloads.length, 2);
     assert.deepEqual(resendPayloads.map((payload) => payload.to), [
       ['admin@example.com'],

@@ -1,0 +1,14 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "metropinjamanberlesen",
+  "pages_build_output_dir": "./out",
+  "compatibility_date": "2026-07-08",
+  "d1_databases": [
+    {
+      "binding": "BOOKING_BACKUP_DB",
+      "database_name": "metropinjamanberlesen_juniorlee",
+      "database_id": "5f4f1ff1-1d5a-45d0-8386-0bbaeb36447b",
+      "migrations_dir": "./migrations"
+    }
+  ]
+}
