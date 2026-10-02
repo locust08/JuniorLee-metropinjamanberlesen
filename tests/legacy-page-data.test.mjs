@@ -183,7 +183,7 @@ test('contact page metadata uses the configured Kuala Lumpur location', async ()
   assert.doesNotMatch(page.metaDescription, /Pelabuhan Klang|Selangor/);
 });
 
-test('only the localized Personal Loan page shows the loan-cost disclosure', async () => {
+test('confirmed disclosures appear on all requested localized pages', async () => {
   globalThis.fetch = async () => {
     throw new Error('use the checked-in fallback content');
   };
@@ -201,7 +201,11 @@ test('only the localized Personal Loan page shows the loan-cost disclosure', asy
       const page = await loadLegacyPage(fileName, pageId, locale);
       const root = parse(page.bodyHtml);
       const disclosure = root.querySelector('#personal-loan-costs');
-      assert.equal(disclosure, null, `${locale}/${pageId} should not show the disclosure`);
+      assert.equal(Boolean(disclosure), ['loan', 'contactUs'].includes(pageId), `${locale}/${pageId} disclosure visibility`);
+      if (disclosure) {
+        for (const value of ['RM5,030.00', 'RM402.40', 'RM452.70', 'RM5,432.40', 'RM432.40', '18%', '4%', '12%']) assert.ok(disclosure.text.includes(value), value);
+        assert.doesNotMatch(disclosure.text, /15\.60%|16\.76%|withheld|pending lender confirmation/);
+      }
       assert.doesNotMatch(page.bodyHtml, removedPauseMessage);
       if (locale === 'en' || locale === 'bm') {
         assert.equal(
@@ -239,19 +243,19 @@ test('only the localized Personal Loan page shows the loan-cost disclosure', asy
   }
 });
 
-test('calculation check matches the conditional RM10 legal and RM30 stamp-duty scenario', () => {
+test('calculation check matches the approved RM0 legal and RM30 stamp-duty example', () => {
   assert.deepEqual(calculateRepresentativeCheck({
     cashReceived: 5000,
     stampDuty: 30,
-    legalCharge: 10,
+    legalCharge: 0,
     flatAnnualRate: 0.08,
     termMonths: 12,
   }), {
-    financedBalance: 5040,
-    interest: 403.2,
-    installment: 453.6,
-    totalRepaid: 5443.2,
-    nominalAprPercent: 15.98,
+    financedBalance: 5030,
+    interest: 402.4,
+    installment: 452.7,
+    totalRepaid: 5432.4,
+    nominalAprPercent: 15.6,
   });
 });
 
@@ -276,10 +280,11 @@ test('published loan terms replace inconsistent pricing while appointment enquir
 
   assert.doesNotMatch(loanPage.bodyHtml, /8%–12% APR|RM448|RM5,448|180-day period/);
   assert.match(personalLoanPage.bodyHtml, /The maximum Annual Percentage Rate \(APR\) is 18%/);
-  assert.match(personalLoanPage.bodyHtml, /Flat interest rates from 8% per annum/);
+  assert.match(personalLoanPage.bodyHtml, /Flat interest rates for unsecured personal and business loans start from 8% per annum/);
   assert.doesNotMatch(personalLoanPage.bodyHtml, /Estimated stamp duty: RM25|RM5,625|RM600 at 12%/);
-  assert.doesNotMatch(loanPage.bodyHtml, /6–60 months|RM500–RM100,000/);
-  assert.match(loanRoot.querySelector('#loan-comparison-disclaimer')?.text || '', /disclosed on the Personal Loan page/);
+  assert.match(loanPage.bodyHtml, /RM500/);
+  assert.match(loanPage.bodyHtml, /RM100,000/);
+  assert.match(loanRoot.querySelector('#loan-comparison-disclaimer')?.text || '', /Review the loan-cost example below/);
   const appointmentButtonIds = ['#how-to-apply-ready-submit-label', '#contact-form-submit-label'];
   appointmentPages.forEach((appointmentPage, index) => {
     const appointmentRoot = parse(appointmentPage.bodyHtml);

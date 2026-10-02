@@ -17,23 +17,23 @@ const pageCopy: Record<SiteLocale, {
 }> = {
   en: {
     title: `Personal Loan Rates, Fees & APR | ${siteConfig.name}`,
-    description: 'Review personal-loan flat interest, the confirmed 18% maximum APR, financed charges and the representative-example requirements.',
+    description: 'Review personal-loan flat interest, the maximum APR for unsecured loans, financed charges and the representative example.',
     heading: 'Personal Loan',
-    heroDescription: 'Review the flat interest rate, maximum APR, financed charges and representative-example requirements before making an enquiry.',
+    heroDescription: 'Review the flat interest rate, maximum APR, financed charges and representative example before making an enquiry.',
     imageAlt: 'Customer reviewing personal-loan rates and repayment information with an adviser',
   },
   bm: {
     title: `Kadar, Fi & APR Pinjaman Peribadi | ${siteConfig.name}`,
-    description: 'Semak kadar faedah rata pinjaman peribadi, APR maksimum 18% yang disahkan, caj pembiayaan dan keperluan contoh perwakilan.',
+    description: 'Semak kadar faedah rata pinjaman peribadi, APR maksimum bagi pinjaman tanpa cagaran, caj pembiayaan dan contoh perwakilan.',
     heading: 'Pinjaman Peribadi',
-    heroDescription: 'Semak kadar faedah rata, APR maksimum, caj pembiayaan dan keperluan contoh perwakilan sebelum membuat pertanyaan.',
+    heroDescription: 'Semak kadar faedah rata, APR maksimum, caj pembiayaan dan contoh perwakilan sebelum membuat pertanyaan.',
     imageAlt: 'Pelanggan menyemak kadar pinjaman peribadi dan maklumat bayaran balik bersama penasihat',
   },
   cn: {
     title: `个人贷款利率、费用与APR | ${siteConfig.name}`,
-    description: '查看个人贷款固定利率、已确认的18%最高APR、融资费用及代表性示例要求。',
+    description: '查看个人贷款固定利率、无抵押贷款最高APR、融资费用及代表性示例。',
     heading: '个人贷款',
-    heroDescription: '咨询前，请查看固定利率、最高APR、融资费用及代表性示例要求。',
+    heroDescription: '咨询前，请查看固定利率、最高APR、融资费用及代表性示例。',
     imageAlt: '客户与顾问查看个人贷款利率及还款资料',
   },
 };

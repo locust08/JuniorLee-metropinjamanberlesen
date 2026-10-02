@@ -1,3 +1,4 @@
+import { loanComplianceStatus } from './loanCompliance.ts';
 import { parse } from 'node-html-parser';
 import { siteConfig } from '../../config/site.ts';
 import type { SitePageId } from '../payload/content.ts';
@@ -32,11 +33,11 @@ type ExperienceCopy = {
 const experienceCopy: Record<'en' | 'bm', ExperienceCopy> = {
   en: {
     headline: 'Quick loan enquiries. Clear costs. Personal assistance.',
-    supporting: 'Start your eligibility enquiry on WhatsApp with your MyKad. For eligible products and service areas, eligible applicants may receive loan funds in as little as 24 hours after Metro receives all required documents, subject to credit assessment, approval, verification and completion of the loan agreement. Our team will confirm whether the timeframe applies to your enquiry.',
+    supporting: loanComplianceStatus.verifiedTerms.en.disbursement,
     whatsappLabel: 'Check Eligibility on WhatsApp',
     benefitsHeading: 'A clearer way to start your loan enquiry',
     benefits: [
-      { title: 'Potential funding within 24 hours', description: 'For eligible applicants and supported products or service areas. The timeframe starts after all required documents are received and remains subject to assessment and approval.' },
+      { title: 'Potential funding within 24 hours', description: loanComplianceStatus.verifiedTerms.en.disbursement },
       { title: 'Simple initial enquiry', description: 'Start with your MyKad; our team will explain any additional documents needed. A MyKad starts the enquiry—it does not guarantee approval.' },
       { title: 'Clear repayment costs', description: 'Understand your instalments, interest, applicable charges and total repayment before agreeing.' },
       { title: 'Real people, real office', description: 'Speak with our team on WhatsApp or arrange a visit to our Kuala Lumpur office.' },
@@ -63,22 +64,22 @@ const experienceCopy: Record<'en' | 'bm', ExperienceCopy> = {
     faqHeading: 'Loan enquiry FAQs',
     faqIntro: 'Answers explain the enquiry stage separately from assessment, approval and disbursement.',
     faqs: [
-      { question: 'Can I receive funds within 24 hours?', answer: 'Potentially, for eligible applicants using products and service areas that support this timeframe. The 24-hour period starts after Metro receives all required documents. Credit assessment, approval, verification and completion of the loan agreement are still required, so timing is not guaranteed.' },
+      { question: 'Can I receive funds within 24 hours?', answer: loanComplianceStatus.verifiedTerms.en.disbursement },
       { question: 'Can I start with my MyKad?', answer: 'Yes. Your MyKad is enough to start an eligibility enquiry. It is not an “IC-only” approval promise; our team will explain any additional documents needed before assessment can be completed.' },
       { question: 'What additional documents might be required?', answer: 'For a personal loan, these may include recent payslips, bank statements, utility bills, an EPF statement and supporting property or tenancy documents where applicable. Requirements depend on your circumstances and the lender’s assessment.' },
       { question: 'Am I eligible with a monthly salary of RM3,000?', answer: 'RM3,000 is the stated minimum monthly salary for a personal-loan enquiry, together with a steady source of income and Malaysian eligibility. Meeting this threshold lets you enquire but does not guarantee approval or a particular loan amount.' },
-      { question: 'How much will I receive and repay?', answer: 'Your quotation will show the cash received, any charges added to the financed balance, interest, monthly instalment, tenure, total repayment and APR. Review these figures before agreeing; confirmed financed charges are included in repayment.' },
+      { question: 'How much will I receive and repay?', answer: loanComplianceStatus.verifiedTerms.en.quotation },
       { question: 'Can I visit your office?', answer: `Yes. The office is at ${siteConfig.contact.address}. Contact us on WhatsApp first to arrange your visit and confirm the documents to bring.` },
       { question: 'What documents are needed for a business loan?', answer: 'Business applicants receive a separate checklist. Depending on the business and assessment, it may include the applicant’s MyKad, business registration documents, relevant statutory forms, recent business bank statements, utility bills, EPF records and other financial or supporting documents.' },
     ],
   },
   bm: {
     headline: 'Pertanyaan pinjaman pantas. Kos jelas. Bantuan peribadi.',
-    supporting: 'Mulakan pertanyaan kelayakan melalui WhatsApp dengan MyKad anda. Bagi produk dan kawasan perkhidmatan yang layak, pemohon yang layak berpeluang menerima dana pinjaman dalam masa seawal 24 jam selepas Metro menerima semua dokumen yang diperlukan, tertakluk pada penilaian kredit, kelulusan, pengesahan dan penyempurnaan perjanjian pinjaman. Pasukan kami akan mengesahkan sama ada tempoh ini terpakai untuk pertanyaan anda.',
+    supporting: loanComplianceStatus.verifiedTerms.bm.disbursement,
     whatsappLabel: 'Semak Kelayakan di WhatsApp',
     benefitsHeading: 'Cara yang lebih jelas untuk memulakan pertanyaan pinjaman',
     benefits: [
-      { title: 'Potensi dana dalam masa 24 jam', description: 'Untuk pemohon serta produk atau kawasan perkhidmatan yang layak. Tempoh bermula selepas semua dokumen yang diperlukan diterima dan masih tertakluk pada penilaian serta kelulusan.' },
+      { title: 'Potensi dana dalam masa 24 jam', description: loanComplianceStatus.verifiedTerms.bm.disbursement },
       { title: 'Pertanyaan awal yang mudah', description: 'Mulakan dengan MyKad anda; pasukan kami akan menerangkan dokumen tambahan yang diperlukan. MyKad memulakan pertanyaan—ia bukan jaminan kelulusan.' },
       { title: 'Kos bayaran balik yang jelas', description: 'Fahami ansuran, faedah, caj yang berkenaan dan jumlah bayaran balik sebelum bersetuju.' },
       { title: 'Pasukan sebenar, pejabat sebenar', description: 'Berbual dengan pasukan kami melalui WhatsApp atau aturkan lawatan ke pejabat Kuala Lumpur kami.' },
@@ -105,11 +106,11 @@ const experienceCopy: Record<'en' | 'bm', ExperienceCopy> = {
     faqHeading: 'Soalan lazim pertanyaan pinjaman',
     faqIntro: 'Jawapan membezakan peringkat pertanyaan daripada penilaian, kelulusan dan penyaluran dana.',
     faqs: [
-      { question: 'Bolehkah saya menerima dana dalam masa 24 jam?', answer: 'Berpotensi, untuk pemohon yang layak serta produk dan kawasan perkhidmatan yang menyokong tempoh ini. Tempoh 24 jam bermula selepas Metro menerima semua dokumen yang diperlukan. Penilaian kredit, kelulusan, pengesahan dan penyempurnaan perjanjian masih diperlukan, jadi tempoh tersebut tidak dijamin.' },
+      { question: 'Bolehkah saya menerima dana dalam masa 24 jam?', answer: loanComplianceStatus.verifiedTerms.bm.disbursement },
       { question: 'Bolehkah saya bermula dengan MyKad?', answer: 'Ya. MyKad anda memadai untuk memulakan pertanyaan kelayakan. Ini bukan janji kelulusan “IC sahaja”; pasukan kami akan menerangkan dokumen tambahan yang diperlukan sebelum penilaian boleh diselesaikan.' },
       { question: 'Apakah dokumen tambahan yang mungkin diperlukan?', answer: 'Untuk pinjaman peribadi, dokumen mungkin termasuk slip gaji terkini, penyata bank, bil utiliti, penyata KWSP dan dokumen hartanah atau sewaan jika berkenaan. Keperluan bergantung pada keadaan anda dan penilaian pemberi pinjam.' },
       { question: 'Adakah saya layak dengan gaji bulanan RM3,000?', answer: 'RM3,000 ialah gaji bulanan minimum yang dinyatakan untuk pertanyaan pinjaman peribadi, bersama sumber pendapatan tetap dan kelayakan sebagai rakyat Malaysia. Memenuhi ambang ini membolehkan anda membuat pertanyaan tetapi tidak menjamin kelulusan atau jumlah pinjaman tertentu.' },
-      { question: 'Berapakah jumlah yang akan saya terima dan bayar balik?', answer: 'Sebut harga anda akan menunjukkan tunai diterima, sebarang caj yang ditambah pada baki pembiayaan, faedah, ansuran bulanan, tempoh, jumlah bayaran balik dan APR. Semak angka ini sebelum bersetuju; caj pembiayaan yang disahkan termasuk dalam bayaran balik.' },
+      { question: 'Berapakah jumlah yang akan saya terima dan bayar balik?', answer: loanComplianceStatus.verifiedTerms.bm.quotation },
       { question: 'Bolehkah saya mengunjungi pejabat anda?', answer: `Ya. Pejabat terletak di ${siteConfig.contact.address}. Hubungi kami melalui WhatsApp terlebih dahulu untuk mengatur lawatan dan mengesahkan dokumen yang perlu dibawa.` },
       { question: 'Apakah dokumen yang diperlukan untuk pinjaman perniagaan?', answer: 'Pemohon perniagaan menerima senarai semak berasingan. Bergantung pada perniagaan dan penilaian, dokumen mungkin termasuk MyKad pemohon, dokumen pendaftaran perniagaan, borang berkanun yang berkaitan, penyata bank perniagaan terkini, bil utiliti, rekod KWSP serta dokumen kewangan atau sokongan lain.' },
     ],

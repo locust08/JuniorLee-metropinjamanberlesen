@@ -24,8 +24,8 @@ test('EN and BM home pages lead with the approved enquiry proposition and four b
   assert.equal(bm.querySelector('#home-hero-main-heading')?.text, 'Pertanyaan pinjaman pantas. Kos jelas. Bantuan peribadi.');
   assert.equal(en.querySelectorAll('#home-key-benefits article').length, 4);
   assert.equal(bm.querySelectorAll('#home-key-benefits article').length, 4);
-  assert.match(en.querySelector('#home-hero-description')?.text || '', /after Metro receives all required documents/);
-  assert.match(bm.querySelector('#home-hero-description')?.text || '', /selepas Metro menerima semua dokumen yang diperlukan/);
+  assert.match(en.querySelector('#home-hero-description')?.text || '', /after all required documents, approval, verification and agreement completion/);
+  assert.match(bm.querySelector('#home-hero-description')?.text || '', /selepas semua dokumen yang diperlukan, kelulusan, pengesahan dan penyempurnaan perjanjian selesai/);
 });
 
 test('WhatsApp is the primary EN and BM enquiry action with separate personal and business messages', async () => {
